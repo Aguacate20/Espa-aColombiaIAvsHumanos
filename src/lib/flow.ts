@@ -1,11 +1,21 @@
-/** Orden canónico del protocolo. Añadir escalas = añadir pasos aquí. */
+/**
+ * Orden canónico del protocolo. Los pasos scale_* corresponden a las escalas
+ * genéricas (una por cuestionario), cuyo orden real vive en
+ * data/scales/registry.ts (GENERIC_SCALES). Si reordenas allí, reordena aquí.
+ */
 export const STEPS = [
   "identify",
   "country",
   "consent",
   "demographics",
   "ceia9",
-  // <-- aquí entrarán HGAITS-24, MCS-12, AIAS-15, UCLA-3, MSPSS-12, SIAS-6, ERQ-10
+  "scale_hgaits",
+  "scale_mcs",
+  "scale_aias",
+  "scale_ucla3",
+  "scale_emasp",
+  "scale_sias6",
+  "scale_erq10",
   "familiarization",
   "practice",
   "trials",
@@ -20,19 +30,32 @@ export const STEP_PATH: Record<Step, string> = {
   consent: "/consentimiento",
   demographics: "/participante",
   ceia9: "/escalas/ceia9",
+  scale_hgaits: "/escalas/hgaits",
+  scale_mcs: "/escalas/mcs",
+  scale_aias: "/escalas/aias",
+  scale_ucla3: "/escalas/ucla3",
+  scale_emasp: "/escalas/emasp",
+  scale_sias6: "/escalas/sias6",
+  scale_erq10: "/escalas/erq10",
   familiarization: "/experimento/familiarizacion",
   practice: "/experimento/practica",
   trials: "/experimento",
   done: "/fin",
 };
 
-/** Etiqueta humana para el mensaje de "retomaste aquí". */
 export const STEP_LABEL: Record<Step, string> = {
   identify: "el inicio",
   country: "la selección de país",
   consent: "el consentimiento informado",
   demographics: "los datos sociodemográficos",
   ceia9: "los cuestionarios",
+  scale_hgaits: "los cuestionarios",
+  scale_mcs: "los cuestionarios",
+  scale_aias: "los cuestionarios",
+  scale_ucla3: "los cuestionarios",
+  scale_emasp: "los cuestionarios",
+  scale_sias6: "los cuestionarios",
+  scale_erq10: "los cuestionarios",
   familiarization: "la presentación de los interlocutores",
   practice: "el ensayo de práctica",
   trials: "las situaciones",
