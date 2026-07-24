@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =====================================================================
+   TEMA
+   Regla de diseño del instrumento: el color institucional vive SOLO en el
+   marco (cabecera, progreso, botones). La zona de respuesta es neutra y
+   perfectamente simétrica, para que ningún tratamiento visual favorezca a
+   uno de los dos interlocutores.
+   ===================================================================== */
+:root {
+  --font-display: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --font-body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --ink: 24 27 32;
+  --muted: 108 116 128;
+  --line: 222 226 232;
+  --surface: 252 252 251;
+
+  /* Colombia · Universidad de La Sabana  (REEMPLAZAR por el hex oficial) */
+  --brand: 16 46 92;
+  --brand-soft: 232 238 247;
+  --accent: 176 137 58;
+}
+
+[data-country="ES"] {
+  /* España · Universitat de València  (REEMPLAZAR por el hex oficial) */
+  --brand: 27 47 74;
+  --brand-soft: 236 238 243;
+  --accent: 138 28 44;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: rgb(var(--surface));
+  color: rgb(var(--ink));
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+/* Foco visible siempre: requisito de accesibilidad, no decoración */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid rgb(var(--accent));
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ---------------------------------------------------------------------
+   Slider bilateral. Se estilan los tres motores (WebKit, Firefox) para que
+   el thumb sea idéntico en todos los navegadores: cualquier asimetría de
+   render sería una fuente de sesgo de lado.
+   --------------------------------------------------------------------- */
+input[type="range"].beam {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  background: transparent;
+  cursor: grab;
+}
+input[type="range"].beam:active {
+  cursor: grabbing;
+}
+input[type="range"].beam::-webkit-slider-runnable-track {
+  height: 2px;
+  background: rgb(var(--line));
+}
+input[type="range"].beam::-moz-range-track {
+  height: 2px;
+  background: rgb(var(--line));
+}
+input[type="range"].beam::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 30px;
+  height: 30px;
+  margin-top: -14px;
+  border-radius: 999px;
+  background: rgb(var(--surface));
+  border: 2px solid rgb(var(--brand));
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.18);
+}
+input[type="range"].beam::-moz-range-thumb {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: rgb(var(--surface));
+  border: 2px solid rgb(var(--brand));
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.18);
+}
+input[type="range"].beam[data-untouched="true"]::-webkit-slider-thumb {
+  border-style: dashed;
+  border-color: rgb(var(--muted));
+}
+input[type="range"].beam[data-untouched="true"]::-moz-range-thumb {
+  border-style: dashed;
+  border-color: rgb(var(--muted));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.fade-in {
+  animation: fade-in 260ms ease-out both;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
