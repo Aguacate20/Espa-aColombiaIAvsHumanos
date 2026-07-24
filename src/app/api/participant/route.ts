@@ -1,32 +1,41 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/supabase";
-import { setParticipantCookie, getParticipant, setStep } from "@/lib/session";
+import { setParticipantCookie, normalizeDocument, normalizeName } from "@/lib/session";
 import { makeSeed, makeParticipantCode } from "@/lib/rng";
 
 export const dynamic = "force-dynamic";
 
-/** Crea el participante con sus datos demográficos y abre la sesión. */
+/**
+ * Crea (o recupera) al participante a partir de nombre + documento.
+ *
+ * El documento normalizado es único: si alguien vuelve a entrar con el mismo
+ * documento, NO se crea una fila nueva, se reabre la suya y se restaura la
+ * cookie. Así la identidad —y el progreso— sobreviven aunque cambie de
+ * dispositivo o borre cookies.
+ */
 export async function POST(req: Request) {
-  const body = await req.json();
+  const { fullName, document } = await req.json();
 
-  const existing = await getParticipant();
+  if (!fullName?.trim() || !document?.trim()) {
+    return NextResponse.json({ ok: false, error: "Faltan datos" }, { status: 400 });
+  }
+
+  const docNorm = normalizeDocument(document);
+
+  const { data: existing } = await db
+    .from("participants")
+    .select("id, current_step, finished_at")
+    .eq("document_norm", docNorm)
+    .maybeSingle();
+
   if (existing) {
-    await db
-      .from("participants")
-      .update({
-        age: body.age ?? null,
-        gender: body.gender ?? null,
-        gender_other: body.genderOther ?? null,
-        education: body.education ?? null,
-        occupation: body.occupation ?? null,
-        email: body.email ?? null,
-        ai_use_frequency: body.aiUse ?? null,
-        consent: true,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", existing.id);
-    await setStep(existing.id, "country");
-    return NextResponse.json({ ok: true, code: existing.code, next: "/pais" });
+    await setParticipantCookie(existing.id);
+    return NextResponse.json({
+      ok: true,
+      resumed: true,
+      finished: !!existing.finished_at,
+      next: existing.finished_at ? "/fin" : "/pais",
+    });
   }
 
   const { data, error } = await db
@@ -34,24 +43,25 @@ export async function POST(req: Request) {
     .insert({
       code: makeParticipantCode(),
       seed: makeSeed(),
+      full_name: fullName.trim(),
+      document_id: document.trim(),
+      document_norm: docNorm,
       current_step: "country",
-      age: body.age ?? null,
-      gender: body.gender ?? null,
-      gender_other: body.genderOther ?? null,
-      education: body.education ?? null,
-      occupation: body.occupation ?? null,
-      email: body.email ?? null,
-      ai_use_frequency: body.aiUse ?? null,
-      consent: true,
       user_agent: req.headers.get("user-agent")?.slice(0, 400) ?? null,
     })
-    .select("id, code")
+    .select("id")
     .single();
 
   if (error || !data) {
+    // Colisión por doble envío: reintenta como recuperación.
+    const { data: retry } = await db.from("participants").select("id, finished_at").eq("document_norm", docNorm).maybeSingle();
+    if (retry) {
+      await setParticipantCookie(retry.id);
+      return NextResponse.json({ ok: true, resumed: true, finished: !!retry.finished_at, next: retry.finished_at ? "/fin" : "/pais" });
+    }
     return NextResponse.json({ ok: false, error: error?.message ?? "insert failed" }, { status: 500 });
   }
 
   await setParticipantCookie(data.id);
-  return NextResponse.json({ ok: true, code: data.code, next: "/pais" });
+  return NextResponse.json({ ok: true, resumed: false, next: "/pais" });
 }

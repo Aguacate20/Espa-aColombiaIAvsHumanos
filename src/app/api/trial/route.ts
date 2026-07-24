@@ -6,30 +6,12 @@ import { toPreferenceIa, toChoice } from "@/lib/trialPlan";
 
 export const dynamic = "force-dynamic";
 
-/**
- * Guarda un ensayo completo (elección + confianza).
- *
- * La CATEGORÍA se resuelve aquí, en el servidor, a partir del situation_id.
- * El cliente nunca la conoce ni la envía, así que no puede filtrarse a la
- * interfaz ni contaminar la respuesta del participante.
- */
+/** Guarda un ensayo. La CATEGORÍA se resuelve en el servidor: nunca llega al cliente. */
 export async function POST(req: Request) {
   const p = await getParticipant();
   if (!p) return NextResponse.json({ ok: false, error: "sin sesión" }, { status: 401 });
 
-  const b = (await req.json()) as {
-    block?: "practice" | "main";
-    trialIndex: number;
-    situationId: string;
-    left: "ia" | "humano";
-    right: "ia" | "humano";
-    sliderValue: number;
-    sliderMoves?: number;
-    rtMs?: number;
-    confidence: number;
-    confidenceRtMs?: number;
-  };
-
+  const b = await req.json();
   const category = categoryOf(b.situationId);
   if (!category) return NextResponse.json({ ok: false, error: "situación desconocida" }, { status: 400 });
 
@@ -45,6 +27,7 @@ export async function POST(req: Request) {
       situation_category: category,
       left_agent: b.left,
       right_agent: b.right,
+      human_agent_gender: b.humanGender ?? null,
       slider_value: slider,
       preference_ia: preferenceIa,
       choice: toChoice(preferenceIa),
@@ -57,7 +40,6 @@ export async function POST(req: Request) {
   );
 
   if (error) return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
-
   if ((b.block ?? "main") === "practice") await setStep(p.id, "trials");
   return NextResponse.json({ ok: true });
 }

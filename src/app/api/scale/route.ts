@@ -1,22 +1,20 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/supabase";
 import { getParticipant, setStep } from "@/lib/session";
-import { CEIA9_ITEMS } from "@/data/scales/ceia9";
+import { SUBSCALE_BY_CODE } from "@/data/scales/registry";
 
 export const dynamic = "force-dynamic";
 
-const SUBSCALE_BY_CODE = new Map(CEIA9_ITEMS.map((i) => [i.code, i.subscale]));
-
-/** Guarda una página de la escala. Idempotente: reenviar sobrescribe. */
 export async function POST(req: Request) {
   const p = await getParticipant();
   if (!p) return NextResponse.json({ ok: false, error: "sin sesión" }, { status: 401 });
 
-  const { scale, answers, pageRtMs, done } = (await req.json()) as {
+  const { scale, answers, order, pageRtMs, nextStepAfter } = (await req.json()) as {
     scale: string;
     answers: Record<string, number>;
+    order?: Record<string, number>;
     pageRtMs?: number;
-    done?: boolean;
+    nextStepAfter?: string;
   };
 
   const rows = Object.entries(answers).map(([item_code, value]) => ({
@@ -25,22 +23,20 @@ export async function POST(req: Request) {
     subscale: SUBSCALE_BY_CODE.get(item_code) ?? null,
     item_code,
     value,
+    presented_index: order?.[item_code] ?? null,
     page_rt_ms: pageRtMs ?? null,
     answered_at: new Date().toISOString(),
   }));
 
   if (rows.length) {
-    const { error } = await db
-      .from("scale_responses")
-      .upsert(rows, { onConflict: "participant_id,scale,item_code" });
+    const { error } = await db.from("scale_responses").upsert(rows, { onConflict: "participant_id,scale,item_code" });
     if (error) return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
   }
 
-  if (done) await setStep(p.id, "familiarization");
+  if (nextStepAfter) await setStep(p.id, nextStepAfter);
   return NextResponse.json({ ok: true });
 }
 
-/** Devuelve lo ya respondido para repoblar el formulario al reanudar. */
 export async function GET(req: Request) {
   const p = await getParticipant();
   if (!p) return NextResponse.json({ ok: false }, { status: 401 });

@@ -3,36 +3,56 @@ import { SITUATIONS } from "@/data/situations";
 import { mulberry32, shuffle } from "./rng";
 
 export type Agent = "ia" | "humano";
+export type HumanGender = "hombre" | "mujer";
 
 export interface PlannedTrial {
-  /** posición en la secuencia (0-based) */
   i: number;
   situationId: string;
   left: Agent;
   right: Agent;
+  /** Cuál de las dos imágenes de interlocutor humano se muestra en este ensayo. */
+  humanGender: HumanGender;
 }
 
 /**
- * Genera el plan completo para un participante:
- *  - orden de las situaciones aleatorio
- *  - lado del agente aleatorio en CADA situación
- *  - contrabalanceado: la mitad de los ensayos tiene la IA a la izquierda
- *    (evita que el azar puro deje a un participante con 22 de 27 a un lado)
+ * Plan completo del participante. Se genera una sola vez y se guarda en
+ * participants.trial_plan, así que el orden y los lados sobreviven a que el
+ * participante cierre el navegador.
+ *
+ * Tres factores, los tres CONTRABALANCEADOS dentro del participante (no
+ * azar puro): con 27 ensayos, el azar puro dejaría a algún participante con
+ * 21 de 27 al mismo lado, y eso mete varianza de lado en el drift rate.
+ *   1. Orden de las situaciones — aleatorio.
+ *   2. Lado del agente — mitad y mitad.
+ *   3. Sexo del interlocutor humano mostrado — mitad y mitad.
  */
 export function buildTrialPlan(seed: number): PlannedTrial[] {
   const rand = mulberry32(seed);
   const order = shuffle(SITUATIONS.map((s) => s.id), rand);
-
   const n = order.length;
-  const sides: Agent[] = [
-    ...Array(Math.ceil(n / 2)).fill("ia" as Agent),
-    ...Array(Math.floor(n / 2)).fill("humano" as Agent),
-  ];
-  const leftSides = shuffle(sides, rand);
+
+  const sides = shuffle(
+    [...Array(Math.ceil(n / 2)).fill("ia" as Agent), ...Array(Math.floor(n / 2)).fill("humano" as Agent)],
+    rand,
+  );
+
+  const genders = shuffle(
+    [
+      ...Array(Math.ceil(n / 2)).fill("hombre" as HumanGender),
+      ...Array(Math.floor(n / 2)).fill("mujer" as HumanGender),
+    ],
+    rand,
+  );
 
   return order.map((situationId, i) => {
-    const left = leftSides[i];
-    return { i, situationId, left, right: left === "ia" ? "humano" : "ia" };
+    const left = sides[i];
+    return {
+      i,
+      situationId,
+      left,
+      right: left === "ia" ? "humano" : "ia",
+      humanGender: genders[i],
+    };
   });
 }
 

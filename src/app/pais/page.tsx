@@ -7,10 +7,9 @@ export const dynamic = "force-dynamic";
 
 export default async function Page() {
   const p = await getParticipant();
-  if (!p) redirect("/participante");
-
+  if (!p) redirect("/");
   return (
-    <Shell progress={0.16} step="2 de 5">
+    <Shell progress={0.1} step="Paso 1">
       <CountryPicker />
     </Shell>
   );

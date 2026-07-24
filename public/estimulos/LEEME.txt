@@ -1,0 +1,22 @@
+Coloca aquí tus 6 imágenes PNG con estos nombres EXACTOS:
+
+  Hombre - IA.png
+  Hombre - Hombre.png
+  Hombre - Mujer.png
+  Mujer - IA.png
+  Mujer - Hombre.png
+  Mujer - Mujer.png
+
+Lectura del nombre:  <sexo del participante> - <interlocutor mostrado>
+
+- Si el participante declaró sexo "Hombre", verá las imágenes que empiezan por "Hombre - ".
+- El agente IA usa "<sexo> - IA.png".
+- El agente humano alterna entre "<sexo> - Hombre.png" y "<sexo> - Mujer.png".
+
+Formato recomendado: PNG cuadrado (p. ej. 600x600), fondo neutro, mismo
+encuadre y tamaño para las 6, para no romper la simetría visual entre agentes.
+
+Si prefieres nombres sin espacios ni tildes, cámbialos aquí y ajusta la
+función fileName() en src/data/stimuli.ts.
+
+Este archivo LEEME.txt puedes borrarlo una vez subas las imágenes.

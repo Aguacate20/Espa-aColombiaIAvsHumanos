@@ -1,25 +1,27 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { iaImage, humanImage, type StimulusSet } from "@/data/stimuli";
 
 export type Agent = "ia" | "humano";
 
 /**
- * SLIDER BILATERAL — el elemento central del experimento.
+ * SLIDER BILATERAL con estímulos y halo dinámico.
  *
- * Restricciones de diseño que NO se pueden relajar:
- *  1. Simetría exacta. Ambos extremos comparten tipografía, peso, color y
- *     ancho de caja. Ninguna señal visual puede hacer un lado más saliente.
- *  2. Sin valor por defecto legible. El pulsador arranca en el centro con
- *     borde punteado y el botón se mantiene deshabilitado hasta que el
- *     participante lo mueve, para no imponer un anclaje.
- *  3. El relleno crece desde el centro hacia el lado elegido: informa la
- *     magnitud de la preferencia sin colorear a ninguno de los dos agentes.
+ * El halo de cada lado crece con la preferencia hacia ese lado: mueve la
+ * barra a la izquierda y el estímulo izquierdo se ilumina y crece; al centro,
+ * ninguno resalta. Comunica la magnitud sin colorear a ningún agente y sin
+ * romper la simetría (ambos usan exactamente el mismo tratamiento).
+ *
+ * Restricciones intactas: sin valor por defecto legible (pulsador punteado,
+ * botón deshabilitado hasta el primer movimiento) y extremos simétricos.
  */
 export function AgentBeam({
   left,
   right,
   labels,
+  stimulusSet,
+  humanGender,
   onCommit,
   hint,
   untouchedHint,
@@ -28,6 +30,8 @@ export function AgentBeam({
   left: Agent;
   right: Agent;
   labels: Record<Agent, string>;
+  stimulusSet: StimulusSet;
+  humanGender: "hombre" | "mujer";
   onCommit: (v: { value: number; moves: number; rtMs: number }) => void;
   hint: string;
   untouchedHint: string;
@@ -43,27 +47,41 @@ export function AgentBeam({
     setValue(50);
     setTouched(false);
     moves.current = 0;
-  }, [labels, left, right]);
+  }, [left, right, humanGender]);
 
   const offset = value - 50; // -50..50
   const fillLeft = offset < 0 ? 50 + offset : 50;
   const fillWidth = Math.abs(offset);
 
+  // Intensidad del halo por lado: 0 en el centro, 1 en el extremo.
+  const leftGlow = touched ? Math.max(0, -offset) / 50 : 0;
+  const rightGlow = touched ? Math.max(0, offset) / 50 : 0;
+
+  const imgFor = (a: Agent) => (a === "ia" ? iaImage(stimulusSet) : humanImage(stimulusSet, humanGender));
+
   return (
-    <div className="mt-10">
-      <div className="flex items-start justify-between gap-6 mb-5">
-        <span className="flex-1 text-left font-display text-[19px] leading-snug text-ink">{labels[left]}</span>
-        <span className="flex-1 text-right font-display text-[19px] leading-snug text-ink">{labels[right]}</span>
+    <div className="mt-8">
+      <div className="grid grid-cols-2 gap-6 sm:gap-12 items-end mb-6">
+        {(["left", "right"] as const).map((sideKey) => {
+          const agent = sideKey === "left" ? left : right;
+          const glow = sideKey === "left" ? leftGlow : rightGlow;
+          return (
+            <div key={sideKey} className="flex flex-col items-center">
+              <div className="w-32 sm:w-40">
+                <StimulusGlow src={imgFor(agent)} alt={labels[agent]} intensity={glow} />
+              </div>
+              <span className="mt-3 text-center font-display text-[17px] sm:text-[19px] leading-snug text-ink">
+                {labels[agent]}
+              </span>
+            </div>
+          );
+        })}
       </div>
 
       <div className="relative py-3">
-        {/* Riel de fondo + relleno desde el centro */}
         <div className="pointer-events-none absolute left-0 right-0 top-1/2 -translate-y-1/2">
           <div className="relative h-[2px] w-full bg-line">
-            <div
-              className="absolute top-0 h-[2px] bg-brand transition-[left,width] duration-100"
-              style={{ left: `${fillLeft}%`, width: `${fillWidth}%` }}
-            />
+            <div className="absolute top-0 h-[2px] bg-brand transition-[left,width] duration-100" style={{ left: `${fillLeft}%`, width: `${fillWidth}%` }} />
             <div className="absolute left-1/2 top-1/2 h-3 w-px -translate-x-1/2 -translate-y-1/2 bg-line" />
           </div>
         </div>
@@ -77,9 +95,7 @@ export function AgentBeam({
           value={value}
           data-untouched={!touched}
           aria-label={hint}
-          aria-valuetext={
-            !touched ? "sin respuesta" : offset === 0 ? "en el centro" : offset < 0 ? labels[left] : labels[right]
-          }
+          aria-valuetext={!touched ? "sin respuesta" : offset === 0 ? "en el centro" : offset < 0 ? labels[left] : labels[right]}
           onChange={(e) => {
             setValue(Number(e.target.value));
             if (!touched) setTouched(true);
@@ -102,6 +118,24 @@ export function AgentBeam({
           {cta}
         </button>
       </div>
+    </div>
+  );
+}
+
+/** Igual que StimulusFrame pero local, para no acoplar el slider a otro archivo. */
+function StimulusGlow({ src, alt, intensity }: { src: string; alt: string; intensity: number }) {
+  const glow = Math.max(0, Math.min(1, intensity));
+  return (
+    <div
+      className="relative rounded-lg overflow-hidden border transition-[box-shadow,border-color,transform] duration-100"
+      style={{
+        borderColor: `rgb(var(--brand) / ${0.25 + glow * 0.75})`,
+        boxShadow: glow > 0.02 ? `0 0 0 ${1 + glow * 3}px rgb(var(--brand) / ${glow * 0.55}), 0 8px 30px rgb(var(--brand) / ${glow * 0.35})` : "0 1px 3px rgb(0 0 0 / 0.12)",
+        transform: `scale(${1 + glow * 0.04})`,
+      }}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={src} alt={alt} className="block w-full h-auto select-none" draggable={false} />
     </div>
   );
 }

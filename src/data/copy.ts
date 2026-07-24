@@ -1,140 +1,114 @@
 /**
- * Redacción por país. Todo texto visible al participante que varíe entre
- * Colombia y España pasa por aquí. Añadir un país = añadir una clave.
+ * Redacción por país. Todo texto visible que varíe entre Colombia y España
+ * pasa por aquí. Añadir un país = añadir una clave.
  */
 export type Country = "CO" | "ES";
 
-export const COUNTRY_META: Record<Country, { label: string; university: string; city: string }> = {
-  CO: { label: "Colombia", university: "Universidad de La Sabana", city: "Chía, Cundinamarca" },
-  ES: { label: "España", university: "Universitat de València", city: "València" },
+export const COUNTRY_META: Record<Country, { label: string; university: string }> = {
+  CO: { label: "Colombia", university: "Universidad de La Sabana" },
+  ES: { label: "España", university: "Universitat de València" },
 };
 
-export const COPY: Record<Country, Record<string, string>> = {
-  CO: {
-    consentTitle: "Antes de empezar",
-    consentBody:
-      "Este estudio investiga a quién acude la gente cuando necesita ayuda en distintas situaciones cotidianas. Tomará entre 15 y 20 minutos. Tus respuestas son anónimas y se usarán solo con fines de investigación. Puedes retirarte en cualquier momento cerrando esta ventana.",
-    consentCheck: "He leído lo anterior y acepto participar voluntariamente.",
-    consentCta: "Aceptar y continuar",
+export const STUDY_TITLE = "Toma de decisiones en la era de la inteligencia artificial";
+export const STUDY_SUBTITLE = "¿A quién acudimos cuando necesitamos ayuda?";
 
-    demoTitle: "Datos del participante",
-    demoLead: "Estos datos nos permiten describir la muestra. No se usan para identificarte individualmente.",
-    demoAge: "Edad",
-    demoGender: "Género",
-    demoEducation: "Nivel educativo alcanzado",
-    demoOccupation: "Ocupación actual",
-    demoEmail: "Correo electrónico (opcional, solo para el sorteo o el envío de resultados)",
-    demoAiUse: "¿Con qué frecuencia usas herramientas de inteligencia artificial?",
+const CO = {
+  // ---- inicio ----
+  landingBody:
+    "Este estudio explora a quién prefieren acudir las personas cuando necesitan ayuda: a otra persona o a un sistema de inteligencia artificial. Toma entre 30 y 40 minutos y puedes hacerlo en varias sesiones.",
+  landingNoTest: "No es una prueba. No hay respuestas correctas ni incorrectas, y no se evalúa tu desempeño.",
+  idTitle: "Empezar",
+  idLead: "Necesitamos estos dos datos únicamente para identificar tu sesión y permitirte retomar el estudio si lo interrumpes.",
+  idName: "Nombre completo",
+  idDocument: "Número de documento de identidad",
+  idNotice:
+    "Al continuar guardamos estos dos datos para identificar tu sesión. En la siguiente pantalla verás el consentimiento informado completo antes de responder nada del estudio.",
+  resumeTitle: "Ya empecé antes",
+  resumeLead: "Ingresa el mismo nombre y documento con los que empezaste y continuarás justo donde quedaste.",
+  resumeCta: "Retomar mi sesión",
+  resumeNotFound: "No encontramos una sesión con esos datos. Revisa que el nombre y el documento sean los mismos que usaste al empezar.",
+  resumeFinished: "Según nuestros registros ya completaste el estudio. Muchas gracias por tu participación.",
 
-    countryTitle: "¿Desde dónde participas?",
-    countryLead: "Selecciona el país donde resides actualmente. La redacción de algunas preguntas se ajusta según tu selección.",
+  // ---- país ----
+  countryTitle: "¿Desde dónde participas?",
+  countryLead: "Selecciona el país donde resides actualmente. La redacción de algunas preguntas y las condiciones de tratamiento de datos se ajustan según tu selección.",
 
-    scaleTitle: "Tu experiencia con la inteligencia artificial",
+  // ---- sociodemográficos ----
+  demoTitle: "Datos sociodemográficos",
+  demoLead: "Estos datos nos permiten describir la muestra. No se usan para identificarte individualmente.",
+  demoAge: "Edad",
+  demoGender: "Sexo",
+  demoGenderHelp: "Se usa para seleccionar las imágenes que verás más adelante.",
+  demoEducation: "Nivel educativo alcanzado",
+  demoOccupation: "Ocupación actual",
+  demoEmail: "Correo electrónico (opcional, solo si quieres recibir los resultados generales)",
+  demoAiUse: "¿Con qué frecuencia usas herramientas de inteligencia artificial?",
+  demoScreenTime: "¿Cuánto tiempo pasas al día frente a pantallas? (celular, computador, televisor, tableta)",
 
-    familTitle: "Vas a conocer a dos interlocutores",
-    familLead:
-      "En la siguiente parte verás una serie de situaciones. En cada una tendrás que indicar a quién acudirías entre estas dos opciones.",
-    agentIaName: "Una inteligencia artificial",
-    agentIaDesc: "Un sistema conversacional como ChatGPT: disponible siempre, responde al instante, no te conoce personalmente.",
-    agentHumanName: "Una persona",
-    agentHumanDesc: "Alguien de tu entorno con quien puedes hablar: te conoce, pero no siempre está disponible.",
+  // ---- cuestionarios ----
+  scaleTitle: "Tu experiencia con la inteligencia artificial",
+  scaleRemaining: "Faltan {n} por responder",
+  scaleGoToMissing: "Ir al primero sin responder",
+  scaleComplete: "Todo respondido",
 
-    practiceTitle: "Ensayo de práctica",
-    practiceLead:
-      "Antes de empezar, prueba cómo funciona la barra. Arrástrala hacia el lado de quien elegirías. Cuanto más la muevas hacia un extremo, más clara es tu preferencia. Esta respuesta no se analiza.",
+  // ---- familiarización ----
+  familIntro: "En la siguiente parte verás una serie de situaciones. En cada una tendrás que indicar a quién acudirías entre estas dos opciones.",
+  agentIaName: "Chat con Inteligencia Artificial",
+  agentIaDesc: "Como ChatGPT, Gemini o Claude: una manera de conversar con un sistema tecnológico artificial que emula las capacidades propiamente humanas.",
+  agentHumanName: "Humano",
+  agentHumanDesc: "Una persona como tú, sin importar su edad, sexo o conocimientos específicos.",
+  familHumanNote: "Pasa el cursor sobre la imagen para ver las dos variantes.",
+  familHumanNoteTouch: "Toca la imagen para ver las dos variantes.",
 
-    trialPrompt: "En esta situación, ¿a quién acudirías?",
-    sliderHint: "Arrastra la barra hacia la opción que elegirías.",
-    sliderUntouched: "Mueve la barra para continuar.",
+  // ---- práctica y ensayos ----
+  practiceTitle: "Ensayo de práctica",
+  practiceLead:
+    "Antes de empezar, prueba cómo funciona la barra. Muévela hacia el lado de quien elegirías: cuanto más la lleves hacia un extremo, mayor es tu preferencia por esa opción, y más se resaltará en pantalla. Esta respuesta no se analiza.",
+  trialPrompt: "En esta situación, ¿a quién acudirías?",
+  sliderHint: "Cuanto más lleves la barra hacia un lado, mayor es tu preferencia por esa opción.",
+  sliderUntouched: "Mueve la barra para continuar.",
+  confidenceTitle: "¿Qué tanto confías en la opción que elegiste en la situación anterior?",
+  confidenceLow: "Nada",
+  confidenceHigh: "Totalmente",
 
-    confidenceTitle: "¿Qué tanto confías en la opción que elegiste en la situación anterior?",
-    confidenceLow: "Nada",
-    confidenceHigh: "Totalmente",
-
-    continueCta: "Continuar",
-    backCta: "Atrás",
-
-    doneTitle: "Listo. Gracias por participar.",
-    doneBody: "Tus respuestas quedaron registradas. Ya puedes cerrar esta ventana.",
-  },
-
-  ES: {
-    consentTitle: "Antes de empezar",
-    consentBody:
-      "Este estudio investiga a quién acude la gente cuando necesita ayuda en distintas situaciones cotidianas. Te llevará entre 15 y 20 minutos. Tus respuestas son anónimas y se usarán solo con fines de investigación. Puedes retirarte en cualquier momento cerrando esta ventana.",
-    consentCheck: "He leído lo anterior y acepto participar voluntariamente.",
-    consentCta: "Aceptar y continuar",
-
-    demoTitle: "Datos del participante",
-    demoLead: "Estos datos nos permiten describir la muestra. No se usan para identificarte individualmente.",
-    demoAge: "Edad",
-    demoGender: "Género",
-    demoEducation: "Nivel de estudios alcanzado",
-    demoOccupation: "Ocupación actual",
-    demoEmail: "Correo electrónico (opcional, solo para el sorteo o el envío de resultados)",
-    demoAiUse: "¿Con qué frecuencia usas herramientas de inteligencia artificial?",
-
-    countryTitle: "¿Desde dónde participas?",
-    countryLead: "Selecciona el país donde resides actualmente. La redacción de algunas preguntas se ajusta según tu selección.",
-
-    scaleTitle: "Tu experiencia con la inteligencia artificial",
-
-    familTitle: "Vas a conocer a dos interlocutores",
-    familLead:
-      "En la siguiente parte verás una serie de situaciones. En cada una tendrás que indicar a quién acudirías entre estas dos opciones.",
-    agentIaName: "Una inteligencia artificial",
-    agentIaDesc: "Un sistema conversacional como ChatGPT: disponible siempre, responde al instante, no te conoce personalmente.",
-    agentHumanName: "Una persona",
-    agentHumanDesc: "Alguien de tu entorno con quien puedes hablar: te conoce, pero no siempre está disponible.",
-
-    practiceTitle: "Ensayo de práctica",
-    practiceLead:
-      "Antes de empezar, prueba cómo funciona la barra. Arrástrala hacia el lado de quien elegirías. Cuanto más la muevas hacia un extremo, más clara es tu preferencia. Esta respuesta no se analiza.",
-
-    trialPrompt: "En esta situación, ¿a quién acudirías?",
-    sliderHint: "Arrastra la barra hacia la opción que elegirías.",
-    sliderUntouched: "Mueve la barra para continuar.",
-
-    confidenceTitle: "¿Cuánto confías en la opción que has elegido en la situación anterior?",
-    confidenceLow: "Nada",
-    confidenceHigh: "Totalmente",
-
-    continueCta: "Continuar",
-    backCta: "Atrás",
-
-    doneTitle: "Listo. Gracias por participar.",
-    doneBody: "Tus respuestas han quedado registradas. Ya puedes cerrar esta ventana.",
-  },
+  // ---- común ----
+  continueCta: "Continuar",
+  backCta: "Atrás",
+  doneTitle: "Listo. Gracias por participar.",
+  doneBody: "Tus respuestas quedaron registradas. Ya puedes cerrar esta ventana.",
 };
+
+const ES: typeof CO = {
+  ...CO,
+  landingBody:
+    "Este estudio explora a quién prefieren acudir las personas cuando necesitan ayuda: a otra persona o a un sistema de inteligencia artificial. Dura entre 30 y 40 minutos y puedes hacerlo en varias sesiones.",
+  idLead: "Necesitamos estos dos datos únicamente para identificar tu sesión y permitirte retomar el estudio si lo interrumpes.",
+  idDocument: "Número de DNI / NIE / pasaporte",
+  demoEducation: "Nivel de estudios alcanzado",
+  demoScreenTime: "¿Cuánto tiempo pasas al día frente a pantallas? (móvil, ordenador, televisión, tableta)",
+  confidenceTitle: "¿Cuánto confías en la opción que has elegido en la situación anterior?",
+  doneBody: "Tus respuestas han quedado registradas. Ya puedes cerrar esta ventana.",
+  resumeNotFound: "No hemos encontrado una sesión con esos datos. Revisa que el nombre y el documento sean los mismos que usaste al empezar.",
+  resumeFinished: "Según nuestros registros ya has completado el estudio. Muchas gracias por tu participación.",
+};
+
+export const COPY: Record<Country, typeof CO> = { CO, ES };
 
 export const OPTIONS: Record<Country, Record<string, string[]>> = {
   CO: {
     gender: ["Mujer", "Hombre", "No binario", "Prefiero no decirlo", "Otro"],
-    education: [
-      "Bachillerato",
-      "Técnico o tecnólogo",
-      "Pregrado en curso",
-      "Pregrado completo",
-      "Especialización",
-      "Maestría",
-      "Doctorado",
-    ],
+    education: ["Bachillerato", "Técnico o tecnólogo", "Pregrado en curso", "Pregrado completo", "Especialización", "Maestría", "Doctorado"],
     aiUse: ["Nunca", "Alguna vez al mes", "Varias veces al mes", "Varias veces por semana", "A diario"],
+    screenTime: ["Menos de 2 horas", "Entre 2 y 4 horas", "Entre 4 y 6 horas", "Entre 6 y 8 horas", "Entre 8 y 10 horas", "Más de 10 horas"],
   },
   ES: {
     gender: ["Mujer", "Hombre", "No binario", "Prefiero no decirlo", "Otro"],
-    education: [
-      "Bachillerato",
-      "Formación profesional",
-      "Grado en curso",
-      "Grado completado",
-      "Máster",
-      "Doctorado",
-    ],
+    education: ["Bachillerato", "Formación profesional", "Grado en curso", "Grado completado", "Máster", "Doctorado"],
     aiUse: ["Nunca", "Alguna vez al mes", "Varias veces al mes", "Varias veces por semana", "A diario"],
+    screenTime: ["Menos de 2 horas", "Entre 2 y 4 horas", "Entre 4 y 6 horas", "Entre 6 y 8 horas", "Entre 8 y 10 horas", "Más de 10 horas"],
   },
 };
 
-export function t(country: Country, key: string): string {
-  return COPY[country][key] ?? COPY.CO[key] ?? key;
+export function t(country: Country, key: keyof typeof CO): string {
+  return COPY[country][key];
 }
