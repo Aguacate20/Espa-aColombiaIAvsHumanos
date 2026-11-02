@@ -71,6 +71,7 @@ const CO = {
   trialPrompt: "En esta situación, ¿a quién acudirías?",
   sliderHint: "Cuanto más lleves la barra hacia un lado, mayor es tu preferencia por esa opción.",
   sliderUntouched: "Mueve la barra para continuar.",
+  saveError: "No se pudo guardar tu respuesta. Revisa tu conexión y vuelve a pulsar «Continuar».",
   confidenceTitle: "¿Qué tanto confías en la opción que elegiste en la situación anterior?",
   confidenceLow: "Nada",
   confidenceHigh: "Totalmente",

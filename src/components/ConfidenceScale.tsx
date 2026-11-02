@@ -9,19 +9,28 @@ export function ConfidenceScale({
   highLabel,
   cta,
   onCommit,
+  busy = false,
 }: {
   title: string;
   lowLabel: string;
   highLabel: string;
   cta: string;
   onCommit: (v: { value: number; rtMs: number }) => void;
+  /** true mientras se guarda: bloquea el botón para evitar doble envío */
+  busy?: boolean;
 }) {
   const [value, setValue] = useState<number | null>(null);
   const t0 = useRef(0);
+  // Un doble toque en "Continuar" de la pantalla anterior caía aquí y marcaba
+  // un valor sin querer: se ignoran los toques de los primeros 350 ms.
+  const [armed, setArmed] = useState(false);
 
   useEffect(() => {
     t0.current = performance.now();
     setValue(null);
+    setArmed(false);
+    const id = setTimeout(() => setArmed(true), 350);
+    return () => clearTimeout(id);
   }, [title]);
 
   return (
@@ -36,7 +45,7 @@ export function ConfidenceScale({
               type="button"
               role="radio"
               aria-checked={value === i}
-              onClick={() => setValue(i)}
+              onClick={() => armed && setValue(i)}
               className={`aspect-square rounded-sm border text-[14px] tabular-nums transition-colors ${
                 value === i
                   ? "border-brand bg-brand text-white"
@@ -56,7 +65,7 @@ export function ConfidenceScale({
       <div className="mt-10 flex justify-center">
         <button
           type="button"
-          disabled={value === null}
+          disabled={value === null || busy}
           onClick={() => onCommit({ value: value!, rtMs: Math.round(performance.now() - t0.current) })}
           className="inline-flex items-center justify-center px-8 py-3 text-[15px] font-medium rounded-sm bg-brand text-white transition-colors hover:bg-ink disabled:opacity-40 disabled:cursor-not-allowed"
         >
