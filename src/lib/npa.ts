@@ -95,11 +95,14 @@ export function clearNpaCookies() {
   cookies().set(NPA_DONE_COOKIE, "", { ...cookieBase, maxAge: 0 });
 }
 
-/** Normaliza el NPA: sin espacios, mayúsculas. */
+/** Sin formato fijo (no sabemos cómo son los NPA): solo se quitan los
+ *  espacios de los extremos y se limita la longitud. */
+export const NPA_MAX = 100;
+
 export function normalizeNpa(raw: string): string {
-  return raw.replace(/\s+/g, "").toUpperCase();
+  return raw.trim();
 }
 
 export function npaLooksValid(npa: string): boolean {
-  return /^[A-Z0-9-]{4,20}$/.test(npa);
+  return npa.length >= 1 && npa.length <= NPA_MAX;
 }

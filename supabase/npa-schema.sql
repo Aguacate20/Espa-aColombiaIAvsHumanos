@@ -21,7 +21,7 @@ create table if not exists npa_tokens_usados (
 -- NPA registrados
 create table if not exists npa_creditos (
   id  uuid primary key default gen_random_uuid(),
-  npa text not null check (npa ~ '^[A-Z0-9-]{4,20}$')
+  npa text not null check (char_length(npa) between 1 and 100)   -- sin formato fijo
 );
 
 alter table npa_tokens_usados enable row level security;

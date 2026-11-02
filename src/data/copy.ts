@@ -89,7 +89,7 @@ const CO = {
   npaLabel: "Indica tu NPA (Número Personal del Alumno)",
   npaRepeat: "Repite tu NPA",
   npaMismatch: "Los dos NPA no coinciden.",
-  npaInvalid: "Revisa el formato: solo letras y números, entre 4 y 20 caracteres.",
+  npaInvalid: "Escribe tu NPA (máximo 100 caracteres).",
   npaSubmit: "Registrar mi NPA",
   npaSaved: "Tu NPA ha quedado registrado. ¡Gracias!",
   npaAlready: "El NPA de esta participación ya se registró.",
