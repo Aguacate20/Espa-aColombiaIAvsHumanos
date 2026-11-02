@@ -31,7 +31,7 @@ function baseSections(country: Country): ConsentSection[] {
     {
       heading: "Qué se le pedirá que haga",
       body: [
-        "1. Datos sociodemográficos. Edad, sexo, nivel educativo, ocupación, uso de pantallas y de herramientas de inteligencia artificial, y el tipo de dispositivo desde el que responde. Aproximadamente 3 minutos.",
+        "1. Datos sociodemográficos. Edad, género, nivel educativo, ocupación, uso de pantallas y de herramientas de inteligencia artificial, y el tipo de dispositivo desde el que responde. Aproximadamente 3 minutos.",
         "2. Cuestionarios. Una serie de escalas sobre su experiencia con la inteligencia artificial, sus relaciones sociales y la manera en que maneja sus emociones. Se responden marcando la opción que mejor lo describe. Aproximadamente 15 a 20 minutos.",
         "3. Tarea experimental. Verá 27 situaciones cotidianas. En cada una indicará a quién acudiría, moviendo una barra hacia una de dos opciones, y después señalará cuánta confianza tiene en la opción que eligió. Aproximadamente 10 a 15 minutos.",
       ],
