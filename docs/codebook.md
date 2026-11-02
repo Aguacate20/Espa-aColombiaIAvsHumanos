@@ -65,6 +65,18 @@ Mismos 18 ítems en los dos países; cambia la redacción validada: CO = Navarro
 
 `value` guarda siempre la respuesta cruda; `v_scale_scores` ya aplica la recodificación. AWA suele mostrar baja fiabilidad y baja correlación con el resto (Navarro et al., 2021): analizarla aparte del total.
 
+## Titulación y salud psicológica (`participants`, migración 007)
+
+| Columna | Pregunta | Valores |
+|---|---|---|
+| `degree` | CO: «Carrera o profesión» · ES: «Titulación» (¿qué estudias o en qué eres profesional?) | texto libre; «Ninguna» si no aplica |
+| `mh_status` | ¿Tienes o has tenido algún problema psicológico o de salud mental? | No / Sí, actualmente / Sí, en el pasado, pero no actualmente / Prefiero no responder |
+| `mh_diagnosed` | ¿Te lo ha diagnosticado un profesional (psicólogo/a, psiquiatra o médico/a)? | Sí / No / Prefiero no responder · NULL si `mh_status` no es «Sí…» |
+| `mh_conditions` | ¿Cuál o cuáles? (respuesta múltiple) | array con: Ansiedad, Depresión, Trastorno bipolar, TDAH, Trastorno del espectro autista, TOC, Estrés postraumático, Trastorno de la conducta alimentaria, Consumo problemático de alcohol u otras sustancias, Trastorno de la personalidad, Trastorno psicótico, Otro, Prefiero no especificar (texto completo tal como aparece en el formulario) |
+| `mh_other` | Texto de «Otro» | texto libre |
+
+Mismas opciones en los dos países. Los participantes anteriores a la migración 007 tienen estas columnas en NULL. Consulta de ejemplo: `select count(*) from participants where 'Ansiedad' = any(mh_conditions);`
+
 ## Dispositivo (`participants`, registrado tras el consentimiento)
 
 | Columna | Origen | Nota |

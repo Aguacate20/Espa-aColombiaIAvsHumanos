@@ -48,6 +48,14 @@ const CO = {
   demoDeviceHelp: "Te pedimos que respondas todo el estudio desde este mismo dispositivo.",
   demoAiUse: "¿Con qué frecuencia usas herramientas de inteligencia artificial?",
   demoScreenTime: "¿Cuánto tiempo pasas al día frente a pantallas? (celular, computador, televisor, tableta)",
+  demoDegree: "Carrera o profesión",
+  demoDegreeHelp: "¿Qué estudias o en qué eres profesional? Por ejemplo: Psicología, Ingeniería de sistemas, Enfermería. Si no aplica, escribe «Ninguna».",
+  demoMhTitle: "Salud psicológica",
+  demoMhLead: "Estas preguntas son voluntarias y anónimas. Si prefieres no responder, elige esa opción.",
+  demoMhStatus: "¿Tienes o has tenido algún problema psicológico o de salud mental?",
+  demoMhDiagnosed: "¿Te lo ha diagnosticado un profesional (psicólogo/a, psiquiatra o médico/a)?",
+  demoMhConditions: "¿Cuál o cuáles? Marca todas las opciones que correspondan.",
+  demoMhOther: "¿Cuál?",
 
   // ---- cuestionarios ----
   scaleTitle: "Tu experiencia con la inteligencia artificial",
@@ -104,11 +112,36 @@ const ES: typeof CO = {
     "Este estudio explora a quién prefieren acudir las personas cuando necesitan ayuda: a otra persona o a un sistema de inteligencia artificial. Dura entre 30 y 40 minutos y puedes hacerlo en varias sesiones.",
   demoEducation: "Nivel de estudios actual",
   demoScreenTime: "¿Cuánto tiempo pasas al día frente a pantallas? (móvil, ordenador, televisión, tableta)",
+  demoDegree: "Titulación",
+  demoDegreeHelp: "¿Qué estudias o en qué eres profesional? Por ejemplo: Grado en Psicología, Ingeniería Informática, Enfermería. Si no aplica, escribe «Ninguna».",
   confidenceTitle: "¿Cuánto confías en la opción que has elegido en la situación anterior?",
   doneBody: "Tus respuestas han quedado registradas. Ya puedes cerrar esta ventana.",
 };
 
 export const COPY: Record<Country, typeof CO> = { CO, ES };
+
+/** Salud psicológica: mismas opciones en los dos países (se guardan tal cual). */
+export const MH_STATUS = ["No", "Sí, actualmente", "Sí, en el pasado, pero no actualmente", "Prefiero no responder"];
+/** Índices de MH_STATUS que abren las preguntas de diagnóstico y cuáles. */
+export const MH_YES = [1, 2];
+export const MH_DIAGNOSED = ["Sí", "No", "Prefiero no responder"];
+export const MH_OTHER = "Otro";
+export const MH_NOT_SPECIFIED = "Prefiero no especificar";
+export const MH_CONDITIONS = [
+  "Ansiedad",
+  "Depresión",
+  "Trastorno bipolar",
+  "TDAH (déficit de atención e hiperactividad)",
+  "Trastorno del espectro autista",
+  "Trastorno obsesivo-compulsivo (TOC)",
+  "Estrés postraumático",
+  "Trastorno de la conducta alimentaria",
+  "Consumo problemático de alcohol u otras sustancias",
+  "Trastorno de la personalidad",
+  "Trastorno psicótico (por ejemplo, esquizofrenia)",
+  MH_OTHER,
+  MH_NOT_SPECIFIED,
+];
 
 export const OPTIONS: Record<Country, Record<string, string[]>> = {
   CO: {

@@ -3,11 +3,13 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Title, Lead, Button } from "@/components/Shell";
-import { COPY, OPTIONS, DEVICE_CODES, type Country } from "@/data/copy";
+import { COPY, OPTIONS, DEVICE_CODES, MH_STATUS, MH_YES, MH_DIAGNOSED, MH_CONDITIONS, MH_OTHER, MH_NOT_SPECIFIED, type Country } from "@/data/copy";
 import { collectDeviceInfo } from "@/lib/deviceInfo";
 import { postJson, SAVE_ERROR } from "@/lib/postJson";
 
-export type DemoInitial = Partial<Record<"age" | "gender" | "genderOther" | "education" | "occupation" | "aiUse" | "screenTime" | "device", string>>;
+export type DemoInitial = Partial<Record<"age" | "gender" | "genderOther" | "education" | "degree" | "occupation" | "aiUse" | "screenTime" | "device" | "mhStatus" | "mhDiagnosed" | "mhOther", string>> & {
+  mhConditions?: string[];
+};
 
 const field = "w-full border border-line rounded-sm px-3 py-2.5 text-[16px] bg-white";
 const label = "block text-[14px] font-medium text-ink mb-1.5";
@@ -30,10 +32,13 @@ export function DemographicsForm({
   const c = COPY[country];
   const o = OPTIONS[country];
 
+  const { mhConditions: initialConditions, ...initialText } = initial;
   const [form, setForm] = useState({
-    age: "", gender: "", genderOther: "", education: "", occupation: "", aiUse: "", screenTime: "", device: "",
-    ...Object.fromEntries(Object.entries(initial).filter(([, v]) => v)),
+    age: "", gender: "", genderOther: "", education: "", degree: "", occupation: "", aiUse: "", screenTime: "", device: "",
+    mhStatus: "", mhDiagnosed: "", mhOther: "",
+    ...Object.fromEntries(Object.entries(initialText).filter(([, v]) => v)),
   });
+  const [conditions, setConditions] = useState<string[]>(initialConditions ?? []);
   const [pre, setPre] = useState<Record<string, number>>({});
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -43,7 +48,20 @@ export function DemographicsForm({
 
   const ageOk = Number(form.age) >= 18 && Number(form.age) <= 99;
   const preComplete = preItems.every((it) => pre[it.code] !== undefined);
-  const ready = ageOk && form.gender && form.education && form.aiUse && form.screenTime && form.device && preComplete;
+  // Salud psicológica: si responde «Sí», se abren dos preguntas más.
+  const mhYes = MH_YES.includes(MH_STATUS.indexOf(form.mhStatus));
+  const mhComplete = form.mhStatus !== "" && (!mhYes || (form.mhDiagnosed !== "" && conditions.length > 0));
+  const ready =
+    ageOk && form.gender && form.education && form.degree.trim() && form.aiUse && form.screenTime && form.device && mhComplete && preComplete;
+
+  function toggleCondition(cond: string) {
+    setConditions((prev) => {
+      if (prev.includes(cond)) return prev.filter((x) => x !== cond);
+      // «Prefiero no especificar» excluye las demás, y viceversa.
+      if (cond === MH_NOT_SPECIFIED) return [cond];
+      return [...prev.filter((x) => x !== MH_NOT_SPECIFIED), cond];
+    });
+  }
   const order = useMemo(() => Object.fromEntries(preItems.map((it, i) => [it.code, i])), [preItems]);
 
   useEffect(() => {
@@ -59,6 +77,10 @@ export function DemographicsForm({
     const demo = await postJson<{ ok: boolean; next: string }>("/api/demographics", {
       ...form,
       age: Number(form.age),
+      degree: form.degree.trim(),
+      mhDiagnosed: mhYes ? form.mhDiagnosed : null,
+      mhConditions: mhYes ? conditions : [],
+      mhOther: mhYes && conditions.includes(MH_OTHER) ? form.mhOther.trim() || null : null,
       deviceReported: DEVICE_CODES[o.device.indexOf(form.device)] ?? null,
       deviceInfo: collectDeviceInfo(),
     });
@@ -102,6 +124,12 @@ export function DemographicsForm({
         </div>
 
         <div>
+          <label className={label} htmlFor="degree">{c.demoDegree}</label>
+          <input id="degree" className={field} maxLength={120} value={form.degree} onChange={set("degree")} />
+          <p className="mt-1.5 text-[12px] text-muted">{c.demoDegreeHelp}</p>
+        </div>
+
+        <div>
           <label className={label} htmlFor="occupation">{c.demoOccupation}</label>
           <input id="occupation" className={field} value={form.occupation} onChange={set("occupation")} />
         </div>
@@ -129,6 +157,52 @@ export function DemographicsForm({
             {o.device.map((g) => <option key={g} value={g}>{g}</option>)}
           </select>
           <p className="mt-1.5 text-[12px] text-muted">{c.demoDeviceHelp}</p>
+        </div>
+      </div>
+
+      {/* Salud psicológica */}
+      <div className="mt-10 border-t border-line pt-8 max-w-xl">
+        <h2 className="font-display text-[20px] text-ink mb-2">{c.demoMhTitle}</h2>
+        <p className="text-[15px] text-muted mb-6">{c.demoMhLead}</p>
+
+        <div className="grid gap-6">
+          <div>
+            <label className={label} htmlFor="mhStatus">{c.demoMhStatus}</label>
+            <select id="mhStatus" className={field} value={form.mhStatus} onChange={set("mhStatus")}>
+              <option value="">Selecciona una opción</option>
+              {MH_STATUS.map((g) => <option key={g} value={g}>{g}</option>)}
+            </select>
+          </div>
+
+          {mhYes && (
+            <>
+              <div>
+                <label className={label} htmlFor="mhDiagnosed">{c.demoMhDiagnosed}</label>
+                <select id="mhDiagnosed" className={field} value={form.mhDiagnosed} onChange={set("mhDiagnosed")}>
+                  <option value="">Selecciona una opción</option>
+                  {MH_DIAGNOSED.map((g) => <option key={g} value={g}>{g}</option>)}
+                </select>
+              </div>
+
+              <fieldset>
+                <legend className={label}>{c.demoMhConditions}</legend>
+                <div className="grid gap-2">
+                  {MH_CONDITIONS.map((cond) => {
+                    const on = conditions.includes(cond);
+                    return (
+                      <label key={cond} className={`flex items-start gap-3 cursor-pointer rounded-sm border px-3 py-2.5 text-[15px] transition-colors ${on ? "border-brand bg-brand/5 text-ink" : "border-line text-ink hover:border-brand"}`}>
+                        <input type="checkbox" className="mt-1 h-4 w-4 accent-[rgb(var(--brand))]" checked={on} onChange={() => toggleCondition(cond)} />
+                        <span>{cond}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+                {conditions.includes(MH_OTHER) && (
+                  <input aria-label={c.demoMhOther} className={`${field} mt-2`} maxLength={120} placeholder={c.demoMhOther} value={form.mhOther} onChange={set("mhOther")} />
+                )}
+              </fieldset>
+            </>
+          )}
         </div>
       </div>
 

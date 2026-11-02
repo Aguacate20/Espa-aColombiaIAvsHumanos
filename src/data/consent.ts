@@ -11,6 +11,12 @@ const RESEARCHER = {
   email: "johangalac@unisabana.edu.co",
 };
 
+const UV_RESEARCHER = {
+  name: "Dra. Inmaculada Montoya Castilla",
+  role: "catedrática del Departamento de Personalidad, Evaluación y Tratamientos Psicológicos (Facultat de Psicologia i Logopèdia)",
+  email: "inmaculada.montoya@uv.es",
+};
+
 /** Bloques comunes a los dos países. */
 function baseSections(country: Country): ConsentSection[] {
   const sections: ConsentSection[] = [
@@ -18,7 +24,7 @@ function baseSections(country: Country): ConsentSection[] {
       heading: "Quiénes somos",
       body: [
         "Muchas gracias por su interés en participar en este proyecto de investigación sobre decisiones emocionales y morales e inteligencia artificial.",
-        "El estudio es dirigido por el investigador principal Johan Sebastián Galindez Acosta, de la Facultad de Ciencias del Comportamiento de la Universidad de La Sabana (Colombia), en colaboración con la Universitat de València (España).",
+        `El estudio es dirigido por el investigador principal ${RESEARCHER.name}, de la Facultad de Ciencias del Comportamiento de la Universidad de La Sabana (Colombia), en colaboración con la Universitat de València (España), donde la responsable del estudio es la ${UV_RESEARCHER.name}, ${UV_RESEARCHER.role}.`,
       ],
     },
     {
@@ -31,7 +37,7 @@ function baseSections(country: Country): ConsentSection[] {
     {
       heading: "Qué se le pedirá que haga",
       body: [
-        "1. Datos sociodemográficos. Edad, género, nivel educativo, ocupación, uso de pantallas y de herramientas de inteligencia artificial, y el tipo de dispositivo desde el que responde. Aproximadamente 3 minutos.",
+        `1. Datos sociodemográficos. Edad, género, nivel educativo, ${country === "ES" ? "titulación" : "carrera o profesión"}, ocupación, uso de pantallas y de herramientas de inteligencia artificial, y el tipo de dispositivo desde el que responde. También se le preguntará si tiene o ha tenido algún problema psicológico o de salud mental y, en ese caso, cuál; puede elegir no responder. Aproximadamente 3 a 4 minutos.`,
         "2. Cuestionarios. Una serie de escalas sobre su experiencia con la inteligencia artificial, sus relaciones sociales y la manera en que maneja sus emociones. Se responden marcando la opción que mejor lo describe. Aproximadamente 15 a 20 minutos.",
         "3. Tarea experimental. Verá 27 situaciones cotidianas. En cada una indicará a quién acudiría, moviendo una barra hacia una de dos opciones, y después señalará cuánta confianza tiene en la opción que eligió. Aproximadamente 10 a 15 minutos.",
       ],
@@ -53,7 +59,7 @@ function baseSections(country: Country): ConsentSection[] {
     {
       heading: "Riesgos e incomodidades",
       body: [
-        "Este estudio no implica riesgos físicos. Algunas preguntas se refieren a emociones, soledad y relaciones personales, y es posible que le resulten incómodas. Puede omitir la participación o retirarse en cualquier momento.",
+        "Este estudio no implica riesgos físicos. Algunas preguntas se refieren a emociones, soledad, relaciones personales y salud psicológica, y es posible que le resulten incómodas. Puede omitir la participación o retirarse en cualquier momento.",
         "Si al responder identifica un malestar emocional que quisiera atender, puede escribir al correo de contacto y le indicaremos servicios de apoyo psicológico disponibles.",
       ],
     },
@@ -67,7 +73,7 @@ function baseSections(country: Country): ConsentSection[] {
       heading: "Confidencialidad y manejo de los datos",
       body: [
         "La participación es anónima. No se le pedirá su nombre, su número de documento, su correo ni ningún otro dato que permita identificarle. Su sesión se asocia únicamente a un código de participante generado al azar y guardado en su navegador, que permite retomar el estudio desde el mismo dispositivo.",
-        "Como no se recogen datos identificativos junto con las respuestas, el equipo investigador no puede saber a quién corresponde cada una.",
+        "Como no se recogen datos identificativos junto con las respuestas, el equipo investigador no puede saber a quién corresponde cada una. Esto incluye las respuestas sobre salud psicológica, que se guardan igual que el resto y solo se analizan de forma agregada.",
         "Los datos se almacenan en servidores con acceso restringido y cifrado, y solo el equipo investigador tiene acceso. Los resultados se publicarán de forma agregada, sin que sea posible identificar a ninguna persona. Los datos ya anonimizados podrán depositarse en un repositorio científico de acceso abierto con fines de verificación y reutilización académica.",
       ],
     },
@@ -96,6 +102,7 @@ function baseSections(country: Country): ConsentSection[] {
       heading: "Protección de datos (Reglamento (UE) 2016/679)",
       body: [
         "Finalidad: realización del estudio científico descrito en este documento. Base jurídica: el consentimiento del interesado (art. 6.1.a RGPD) y el tratamiento con fines de investigación científica (art. 9.2.j RGPD).",
+        "Entre los datos que se recogen hay una pregunta voluntaria sobre salud psicológica, que es una categoría especial de datos (art. 9 RGPD). Se responde de forma anónima y puede elegir no responderla.",
         "Conservación: las respuestas se recogen de forma anónima y se conservan con fines de investigación. La lista de NPA se conserva solo hasta que se asignen los puntos de clase y después se suprime.",
         "Derechos: puede ejercer sus derechos de acceso, rectificación, supresión, limitación, portabilidad y oposición escribiendo al correo de contacto, así como presentar una reclamación ante la Agencia Española de Protección de Datos.",
       ],
@@ -105,9 +112,11 @@ function baseSections(country: Country): ConsentSection[] {
   sections.push({
     heading: "Contacto",
     body: [
-      `Investigador principal: ${RESEARCHER.name}`,
-      `Celular: ${RESEARCHER.phone}`,
+      `Investigador principal: ${RESEARCHER.name} (Universidad de La Sabana)`,
+      `${country === "ES" ? "Móvil" : "Celular"}: ${RESEARCHER.phone}`,
       `Correo: ${RESEARCHER.email}`,
+      `Responsable en la Universitat de València: ${UV_RESEARCHER.name}`,
+      `Correo: ${UV_RESEARCHER.email}`,
     ],
   });
 

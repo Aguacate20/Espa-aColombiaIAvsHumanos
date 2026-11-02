@@ -23,6 +23,11 @@ create table if not exists participants (
   gender_other      text,
   education         text,
   occupation        text,
+  degree            text,                          -- migración 007
+  mh_status         text,                          -- migración 007
+  mh_diagnosed      text,                          -- migración 007
+  mh_conditions     text[],                        -- migración 007
+  mh_other          text,                          -- migración 007
   email             text,
   ai_use_frequency  text,
 

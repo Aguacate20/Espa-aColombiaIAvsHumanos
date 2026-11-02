@@ -19,7 +19,7 @@ export default async function Page() {
   // Si vuelve con «Atrás», el formulario aparece con lo que ya había respondido.
   const { data: d } = await db
     .from("participants")
-    .select("age, gender, gender_other, education, occupation, ai_use_frequency, screen_time, device_reported")
+    .select("*")
     .eq("id", p.id)
     .maybeSingle();
   const devIdx = DEVICE_CODES.indexOf(d?.device_reported as (typeof DEVICE_CODES)[number]);
@@ -28,10 +28,15 @@ export default async function Page() {
     gender: d?.gender ?? "",
     genderOther: d?.gender_other ?? "",
     education: d?.education ?? "",
+    degree: d?.degree ?? "",
     occupation: d?.occupation ?? "",
     aiUse: d?.ai_use_frequency ?? "",
     screenTime: d?.screen_time ?? "",
     device: devIdx >= 0 ? OPTIONS[p.country].device[devIdx] : "",
+    mhStatus: d?.mh_status ?? "",
+    mhDiagnosed: d?.mh_diagnosed ?? "",
+    mhOther: d?.mh_other ?? "",
+    mhConditions: Array.isArray(d?.mh_conditions) ? d.mh_conditions : [],
   };
 
   return (
