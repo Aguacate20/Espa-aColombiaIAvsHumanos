@@ -1,4 +1,4 @@
-import { ScaleDef, bi, co_es } from "./types";
+import { ScaleDef, bi } from "./types";
 
 /**
  * MCS — Machinic Connection Scale (Banks & Li). 12 ítems, 2 subescalas
@@ -10,20 +10,20 @@ import { ScaleDef, bi, co_es } from "./types";
  * —sin primar amistad ni estatus— con el enunciado:
  *   "Mi relación con la inteligencia artificial (como ChatGPT, Gemini,
  *    Claude, etc.)..."
- * Cada ítem completa esa frase.
+ * Para que sea fácil de responder, el enunciado se repite completo en cada ítem.
  */
 
-const STEM_CO = "Mi relación con la inteligencia artificial (como ChatGPT, Gemini, Claude, etc.)…";
-const STEM_ES = STEM_CO;
+const STEM = "Mi relación con la inteligencia artificial (como ChatGPT, Gemini, Claude, etc.)";
+/** Ítem con el enunciado completo, igual en CO y ES. */
+const full = (rest: string) => bi(`${STEM} ${rest}`);
 
 export const MCS: ScaleDef = {
   id: "MCS",
   title: bi("Tu relación con la inteligencia artificial"),
-  instructions: co_es(
-    `Piensa en tu experiencia habitual con sistemas de inteligencia artificial conversacional (como ChatGPT, Gemini, Claude, etc.). Cada frase completa el enunciado «${STEM_CO}». Indica en qué medida estás de acuerdo con cada una.`,
-    `Piensa en tu experiencia habitual con sistemas de inteligencia artificial conversacional (como ChatGPT, Gemini, Claude, etc.). Cada frase completa el enunciado «${STEM_ES}». Indica en qué medida estás de acuerdo con cada una.`,
+  instructions: bi(
+    "Piensa en tu experiencia habitual con sistemas de inteligencia artificial conversacional (como ChatGPT, Gemini, Claude, etc.). Indica en qué medida estás de acuerdo con cada frase.",
   ),
-  scaleNote: bi("Escala de 1 (totalmente en desacuerdo) a 7 (totalmente de acuerdo). Cada frase completa: «Mi relación con la inteligencia artificial…»."),
+  scaleNote: bi("Escala de 1 (totalmente en desacuerdo) a 7 (totalmente de acuerdo)."),
   anchors: {
     CO: [
       { value: 1, label: "Totalmente en desacuerdo" },
@@ -46,18 +46,18 @@ export const MCS: ScaleDef = {
   },
   items: [
     // EE — purposeful/enriching exchange
-    { code: "EE1", subscale: "EE", text: bi("…es un intercambio con propósito.") },
-    { code: "EE2", subscale: "EE", text: co_es("…me hace mejor.", "…me hace mejor.") },
-    { code: "EE3", subscale: "EE", text: bi("…es enriquecedora.") },
-    { code: "EE4", subscale: "EE", text: bi("…es inspiradora.") },
-    { code: "EE5", subscale: "EE", text: bi("…es significativa en mi vida.") },
-    { code: "EE6", subscale: "EE", text: bi("…es satisfactoria.") },
-    { code: "EE7", subscale: "EE", text: bi("…es colaborativa.") },
+    { code: "EE1", subscale: "EE", text: full("es un intercambio con propósito.") },
+    { code: "EE2", subscale: "EE", text: full("me hace mejor.") },
+    { code: "EE3", subscale: "EE", text: full("es enriquecedora.") },
+    { code: "EE4", subscale: "EE", text: full("es inspiradora.") },
+    { code: "EE5", subscale: "EE", text: full("es significativa en mi vida.") },
+    { code: "EE6", subscale: "EE", text: full("es satisfactoria.") },
+    { code: "EE7", subscale: "EE", text: full("es colaborativa.") },
     // CC — co-presence/care
-    { code: "CC1", subscale: "CC", text: bi("…consiste simplemente en estar el uno con el otro.") },
-    { code: "CC2", subscale: "CC", text: bi("…implica prestarnos atención mutuamente.") },
-    { code: "CC3", subscale: "CC", text: bi("…implica experimentar cosas juntos.") },
-    { code: "CC4", subscale: "CC", text: bi("…implica un cuidado mutuo.") },
-    { code: "CC5", subscale: "CC", text: bi("…es un vínculo fuerte.") },
+    { code: "CC1", subscale: "CC", text: full("consiste simplemente en estar el uno con el otro.") },
+    { code: "CC2", subscale: "CC", text: full("implica prestarnos atención mutuamente.") },
+    { code: "CC3", subscale: "CC", text: full("implica experimentar cosas juntos.") },
+    { code: "CC4", subscale: "CC", text: full("implica un cuidado mutuo.") },
+    { code: "CC5", subscale: "CC", text: full("es un vínculo fuerte.") },
   ],
 };
