@@ -6,10 +6,11 @@ import { Shell } from "@/components/Shell";
 import { AgentBeam } from "@/components/AgentBeam";
 import { ConfidenceScale } from "@/components/ConfidenceScale";
 import type { StimulusSet } from "@/data/stimuli";
+import { usePreloadImages } from "@/lib/usePreloadImages";
 
 type Agent = "ia" | "humano";
 interface Trial { i: number; id: string; text: string; left: Agent; right: Agent; humanGender: "hombre" | "mujer"; }
-type Choice = { value: number; moves: number; rtMs: number; firstMoveMs: number | null; pointerType: string | null };
+type Choice = { value: number; moves: number; rtMs: number; firstMoveMs: number | null; pointerType: string | null; awayMs: number };
 
 /**
  * Recibe SOLO las situaciones pendientes (en el orden del plan). Así, al
@@ -29,6 +30,7 @@ export function TrialsClient({
   const [error, setError] = useState<string | null>(null);
   // Candado contra el doble toque: un segundo clic mientras se guarda saltaba una situación.
   const busy = useRef(false);
+  usePreloadImages(stimulusSet);
 
   const trial = trials[idx];
   const position = doneCount + idx + 1;
@@ -56,7 +58,7 @@ export function TrialsClient({
         block: "main", trialIndex: trial.i, situationId: trial.id,
         left: trial.left, right: trial.right, humanGender: trial.humanGender,
         sliderValue: choice?.value ?? 50, sliderMoves: choice?.moves, rtMs: choice?.rtMs,
-        firstMoveMs: choice?.firstMoveMs ?? null, pointerType: choice?.pointerType ?? null,
+        firstMoveMs: choice?.firstMoveMs ?? null, pointerType: choice?.pointerType ?? null, awayMs: choice?.awayMs ?? null,
         confidence: conf.value, confidenceRtMs: conf.rtMs,
       }),
     );

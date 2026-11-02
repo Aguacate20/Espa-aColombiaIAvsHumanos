@@ -10,13 +10,18 @@ export function ConsentClient({ consent }: { consent: Consent }) {
   const router = useRouter();
   const [checked, setChecked] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState(false);
 
   async function accept() {
+    if (busy) return;
     setBusy(true);
-    const res = await fetch("/api/consent", { method: "POST" });
-    const j = await res.json();
+    setError(false);
+    const j = await fetch("/api/consent", { method: "POST" }).then((r) => r.json()).catch(() => ({ ok: false }));
     if (j.ok) router.push(j.next);
-    else setBusy(false);
+    else {
+      setBusy(false);
+      setError(true);
+    }
   }
 
   return (
@@ -40,6 +45,8 @@ export function ConsentClient({ consent }: { consent: Consent }) {
           <input type="checkbox" checked={checked} onChange={(e) => setChecked(e.target.checked)} className="mt-1 h-4 w-4 accent-[rgb(var(--brand))]" />
           <span className="text-[15px] text-ink">{consent.checkboxLabel}</span>
         </label>
+
+        {error && <p className="mt-4 text-[14px] text-accent">No se pudo continuar. Revisa tu conexión e inténtalo de nuevo.</p>}
 
         <div className="mt-6 flex flex-wrap gap-3">
           <Button onClick={accept} disabled={!checked || busy}>

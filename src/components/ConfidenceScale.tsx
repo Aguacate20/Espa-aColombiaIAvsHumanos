@@ -22,14 +22,14 @@ export function ConfidenceScale({
   const [value, setValue] = useState<number | null>(null);
   const t0 = useRef(0);
   // Un doble toque en "Continuar" de la pantalla anterior caía aquí y marcaba
-  // un valor sin querer: se ignoran los toques de los primeros 350 ms.
+  // un valor sin querer: se ignoran los toques de los primeros 250 ms (nadie apunta y toca un número tan rápido).
   const [armed, setArmed] = useState(false);
 
   useEffect(() => {
     t0.current = performance.now();
     setValue(null);
     setArmed(false);
-    const id = setTimeout(() => setArmed(true), 350);
+    const id = setTimeout(() => setArmed(true), 250);
     return () => clearTimeout(id);
   }, [title]);
 

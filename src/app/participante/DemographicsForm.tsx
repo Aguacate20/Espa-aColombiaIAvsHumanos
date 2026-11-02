@@ -1,10 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Title, Lead, Button } from "@/components/Shell";
 import { COPY, OPTIONS, DEVICE_CODES, type Country } from "@/data/copy";
 import { collectDeviceInfo } from "@/lib/deviceInfo";
+import { postJson, SAVE_ERROR } from "@/lib/postJson";
+
+export type DemoInitial = Partial<Record<"age" | "gender" | "genderOther" | "education" | "occupation" | "aiUse" | "screenTime" | "device", string>>;
 
 const field = "w-full border border-line rounded-sm px-3 py-2.5 text-[16px] bg-white";
 const label = "block text-[14px] font-medium text-ink mb-1.5";
@@ -14,11 +17,14 @@ export function DemographicsForm({
   preItems,
   preAnchors,
   preInstructions,
+  initial = {},
 }: {
   country: Country;
   preItems: { code: string; text: string }[];
   preAnchors: string[];
   preInstructions: string;
+  /** Lo ya guardado, para que al volver con «Atrás» no aparezca el formulario vacío. */
+  initial?: DemoInitial;
 }) {
   const router = useRouter();
   const c = COPY[country];
@@ -26,6 +32,7 @@ export function DemographicsForm({
 
   const [form, setForm] = useState({
     age: "", gender: "", genderOther: "", education: "", occupation: "", aiUse: "", screenTime: "", device: "",
+    ...Object.fromEntries(Object.entries(initial).filter(([, v]) => v)),
   });
   const [pre, setPre] = useState<Record<string, number>>({});
   const [busy, setBusy] = useState(false);
@@ -39,27 +46,27 @@ export function DemographicsForm({
   const ready = ageOk && form.gender && form.education && form.aiUse && form.screenTime && form.device && preComplete;
   const order = useMemo(() => Object.fromEntries(preItems.map((it, i) => [it.code, i])), [preItems]);
 
+  useEffect(() => {
+    fetch("/api/scale?scale=PRE").then((r) => r.json()).then((j) => {
+      if (j.ok) setPre((prev) => ({ ...(j.answers ?? {}), ...prev }));
+    }).catch(() => {});
+  }, []);
+
   async function submit() {
+    if (busy) return;
     setBusy(true);
     setError(null);
-    const demo = await fetch("/api/demographics", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...form,
-        age: Number(form.age),
-        deviceReported: DEVICE_CODES[o.device.indexOf(form.device)] ?? null,
-        deviceInfo: collectDeviceInfo(),
-      }),
-    }).then((r) => r.json());
-
-    if (!demo.ok) { setError("No se pudo guardar. Revisa tu conexión e inténtalo otra vez."); setBusy(false); return; }
-
-    await fetch("/api/scale", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ scale: "PRE", answers: pre, order }),
+    const demo = await postJson<{ ok: boolean; next: string }>("/api/demographics", {
+      ...form,
+      age: Number(form.age),
+      deviceReported: DEVICE_CODES[o.device.indexOf(form.device)] ?? null,
+      deviceInfo: collectDeviceInfo(),
     });
+
+    if (!demo?.ok) { setError(SAVE_ERROR); setBusy(false); return; }
+
+    const saved = await postJson("/api/scale", { scale: "PRE", answers: pre, order });
+    if (!saved) { setError(SAVE_ERROR); setBusy(false); return; }
 
     router.push(demo.next);
   }

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Shell, Title, Button } from "@/components/Shell";
 import { ScaleGridItem } from "@/components/ScaleGrid";
 import type { Anchor } from "@/data/scales/types";
+import { postJson, SAVE_ERROR } from "@/lib/postJson";
 
 interface ScaleView {
   id: string;
@@ -24,11 +25,12 @@ export function GenericScaleForm({ scale }: { scale: ScaleView }) {
   const router = useRouter();
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const t0 = useRef(performance.now());
 
   useEffect(() => {
     t0.current = performance.now();
-    fetch(`/api/scale?scale=${scale.id}`).then((r) => r.json()).then((j) => { if (j.ok) setAnswers(j.answers ?? {}); }).catch(() => {});
+    fetch(`/api/scale?scale=${scale.id}`).then((r) => r.json()).then((j) => { if (j.ok) setAnswers((prev) => ({ ...(j.answers ?? {}), ...prev })); }).catch(() => {});
   }, [scale.id]);
 
   const answered = Object.keys(answers).length;
@@ -40,14 +42,18 @@ export function GenericScaleForm({ scale }: { scale: ScaleView }) {
   }
 
   async function go(direction: "next" | "back") {
+    if (busy) return;
     setBusy(true);
+    setError(null);
     // Guarda siempre lo respondido (aunque vaya hacia atrás no se pierde).
-    await fetch("/api/scale", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ scale: scale.id, answers, pageRtMs: Math.round(performance.now() - t0.current), direction }),
-    });
-    const nav = await fetch(`/api/scale/nav?scale=${scale.id}&dir=${direction}`).then((r) => r.json());
+    // Si no se guarda, NO avanza: así nunca queda un cuestionario vacío en la base.
+    const saved = await postJson("/api/scale", { scale: scale.id, answers, pageRtMs: Math.round(performance.now() - t0.current), direction });
+    const nav = saved ? await fetch(`/api/scale/nav?scale=${scale.id}&dir=${direction}`).then((r) => r.json()).catch(() => null) : null;
+    if (!saved || !nav?.path) {
+      setBusy(false);
+      setError(SAVE_ERROR);
+      return;
+    }
     router.push(nav.path);
   }
 
@@ -85,6 +91,7 @@ export function GenericScaleForm({ scale }: { scale: ScaleView }) {
           <Button onClick={() => go("next")} disabled={!complete || busy}>
             {busy ? "Guardando…" : "Continuar"}
           </Button>
+          {error && <p className="w-full text-[14px] text-accent">{error}</p>}
           {!complete && (
             <button type="button" onClick={goToMissing} className="text-[13px] text-accent underline underline-offset-2">
               Faltan {missing.length} · ir al primero sin responder

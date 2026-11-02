@@ -18,7 +18,7 @@ const clean = (s: string) => s.replace(/\s+/g, "").toUpperCase();
  * /api/finish al completar las 27 situaciones. Se guarda en otra base de datos.
  */
 export function NpaBox({ copy }: { copy: Copy }) {
-  const [status, setStatus] = useState<"loading" | "available" | "done" | "saved" | "locked" | "disabled">("loading");
+  const [status, setStatus] = useState<"loading" | "available" | "done" | "saved" | "locked" | "disabled" | "error">("loading");
   const [npa, setNpa] = useState("");
   const [npa2, setNpa2] = useState("");
   const [busy, setBusy] = useState(false);
@@ -86,6 +86,7 @@ export function NpaBox({ copy }: { copy: Copy }) {
       {status === "done" && <p className="text-[15px] text-muted">{copy.npaAlready}</p>}
       {status === "locked" && <p className="text-[15px] text-muted">{copy.npaLocked}</p>}
       {status === "disabled" && <p className="text-[15px] text-muted">{copy.npaDisabled}</p>}
+      {status === "error" && <p className="text-[15px] text-accent">{copy.npaError}</p>}
     </section>
   );
 }

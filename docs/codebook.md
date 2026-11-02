@@ -90,6 +90,7 @@ Sugerencia de covariable para el DDM: `device_reported`; contrastar con `device_
 | `rt_ms` | ms | Desde el render de la situación hasta confirmar la elección (incluye el arrastre). |
 | `first_move_ms` | ms | Desde el render hasta el **primer** movimiento del slider. Alternativa de RT para el DDM sin el tiempo motor del arrastre. |
 | `input_pointer_type` | mouse / touch / pen / keyboard | Modalidad con la que se movió el slider en ese ensayo. |
+| `away_ms` | ms | Tiempo fuera de la tarea durante la elección (cambió de app/pestaña o la ventana perdió el foco). Si es > 0, el RT no es limpio. |
 | `slider_moves` | entero | Número de ajustes antes de confirmar. Proxy de vacilación. |
 | `confidence` | 0–10 | Confianza declarada en la opción elegida. |
 | `confidence_rt_ms` | ms | Latencia de la valoración de confianza. |
@@ -100,5 +101,6 @@ Sugerencia de covariable para el DDM: `device_reported`; contrastar con `device_
 
 - `block = 'practice'` (siempre).
 - `rt_ms < 400` — respuesta anterior a la lectura del enunciado.
+- `away_ms > 0` — el participante salió de la tarea mientras elegía: excluir el ensayo del DDM (no del análisis de preferencia).
 - Participantes con `finished_at is null` y menos de 27 ensayos, según el criterio que preregistréis.
 - `slider_moves = 1` en más del 90 % de los ensayos con `preference_ia` constante — patrón de respuesta plana.

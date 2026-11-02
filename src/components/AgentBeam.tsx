@@ -32,7 +32,7 @@ export function AgentBeam({
   labels: Record<Agent, string>;
   stimulusSet: StimulusSet;
   humanGender: "hombre" | "mujer";
-  onCommit: (v: { value: number; moves: number; rtMs: number; firstMoveMs: number | null; pointerType: string | null }) => void;
+  onCommit: (v: { value: number; moves: number; rtMs: number; firstMoveMs: number | null; pointerType: string | null; awayMs: number }) => void;
   hint: string;
   untouchedHint: string;
   cta: string;
@@ -45,6 +45,31 @@ export function AgentBeam({
   // (PointerEvent.pointerType: "mouse" | "touch" | "pen"; "keyboard" si se usa el teclado).
   const firstMove = useRef<number | null>(null);
   const pointerType = useRef<string | null>(null);
+  // Tiempo FUERA de la tarea durante la elección (cambió de app o de pestaña,
+  // o la ventana perdió el foco). Un RT con away_ms > 0 no es un RT limpio.
+  const awayMs = useRef(0);
+  const awaySince = useRef<number | null>(null);
+
+  useEffect(() => {
+    const leave = () => {
+      if (awaySince.current === null) awaySince.current = performance.now();
+    };
+    const back = () => {
+      if (awaySince.current !== null && !document.hidden) {
+        awayMs.current += performance.now() - awaySince.current;
+        awaySince.current = null;
+      }
+    };
+    const onVisibility = () => (document.hidden ? leave() : back());
+    document.addEventListener("visibilitychange", onVisibility);
+    window.addEventListener("blur", leave);
+    window.addEventListener("focus", back);
+    return () => {
+      document.removeEventListener("visibilitychange", onVisibility);
+      window.removeEventListener("blur", leave);
+      window.removeEventListener("focus", back);
+    };
+  }, []);
 
   useEffect(() => {
     t0.current = performance.now();
@@ -53,6 +78,8 @@ export function AgentBeam({
     moves.current = 0;
     firstMove.current = null;
     pointerType.current = null;
+    awayMs.current = 0;
+    awaySince.current = null;
   }, [left, right, humanGender]);
 
   const offset = value - 50; // -50..50
@@ -133,6 +160,7 @@ export function AgentBeam({
               rtMs: Math.round(performance.now() - t0.current),
               firstMoveMs: firstMove.current,
               pointerType: pointerType.current,
+              awayMs: Math.round(awayMs.current + (awaySince.current !== null ? performance.now() - awaySince.current : 0)),
             })
           }
           className="inline-flex items-center justify-center px-8 py-3 text-[15px] font-medium rounded-sm bg-brand text-white transition-colors hover:bg-ink disabled:opacity-40 disabled:cursor-not-allowed"

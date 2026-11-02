@@ -1,9 +1,10 @@
 /**
  * ESTÍMULOS VISUALES
  *
- * Los PNG van en  public/estimulos/  con estos nombres exactos:
- *   Hombre - IA.png      Hombre - Hombre.png      Hombre - Mujer.png
- *   Mujer - IA.png       Mujer - Hombre.png       Mujer - Mujer.png
+ * Las imágenes (JPG de 720 px de ancho, ~40 KB: cargan rápido en el celular)
+ * van en  public/estimulos/  con estos nombres exactos:
+ *   Hombre - IA.jpg      Hombre - Hombre.jpg      Hombre - Mujer.jpg
+ *   Mujer - IA.jpg       Mujer - Hombre.jpg       Mujer - Mujer.jpg
  *
  * Lectura del nombre:  <sexo del participante> - <interlocutor mostrado>
  *
@@ -16,7 +17,7 @@ export type HumanGender = "hombre" | "mujer";
 const LABEL: Record<string, string> = { hombre: "Hombre", mujer: "Mujer", ia: "IA" };
 
 function fileName(set: StimulusSet, agent: "ia" | HumanGender): string {
-  return `/estimulos/${LABEL[set]} - ${LABEL[agent]}.png`;
+  return `/estimulos/${LABEL[set]} - ${LABEL[agent]}.jpg`;
 }
 
 /** encodeURI convierte los espacios en %20; los nombres con espacios funcionan igual. */

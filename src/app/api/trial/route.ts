@@ -18,28 +18,35 @@ export async function POST(req: Request) {
   const slider = Math.max(0, Math.min(100, Math.round(b.sliderValue)));
   const preferenceIa = toPreferenceIa(slider, b.left);
 
-  const { error } = await db.from("trials").upsert(
-    {
-      participant_id: p.id,
-      block: b.block ?? "main",
-      trial_index: b.trialIndex,
-      situation_id: b.situationId,
-      situation_category: category,
-      left_agent: b.left,
-      right_agent: b.right,
-      human_agent_gender: b.humanGender ?? null,
-      slider_value: slider,
-      preference_ia: preferenceIa,
-      choice: toChoice(preferenceIa),
-      slider_moves: b.sliderMoves ?? null,
-      rt_ms: b.rtMs ?? null,
-      first_move_ms: typeof b.firstMoveMs === "number" ? Math.round(b.firstMoveMs) : null,
-      input_pointer_type: typeof b.pointerType === "string" ? b.pointerType.slice(0, 12) : null,
-      confidence: Math.max(0, Math.min(10, Math.round(b.confidence))),
-      confidence_rt_ms: b.confidenceRtMs ?? null,
-    },
-    { onConflict: "participant_id,block,situation_id" },
-  );
+  const row: Record<string, unknown> = {
+    participant_id: p.id,
+    block: b.block ?? "main",
+    trial_index: b.trialIndex,
+    situation_id: b.situationId,
+    situation_category: category,
+    left_agent: b.left,
+    right_agent: b.right,
+    human_agent_gender: b.humanGender ?? null,
+    slider_value: slider,
+    preference_ia: preferenceIa,
+    choice: toChoice(preferenceIa),
+    slider_moves: b.sliderMoves ?? null,
+    rt_ms: b.rtMs ?? null,
+    first_move_ms: typeof b.firstMoveMs === "number" ? Math.round(b.firstMoveMs) : null,
+    input_pointer_type: typeof b.pointerType === "string" ? b.pointerType.slice(0, 12) : null,
+    confidence: Math.max(0, Math.min(10, Math.round(b.confidence))),
+    confidence_rt_ms: b.confidenceRtMs ?? null,
+    away_ms: typeof b.awayMs === "number" ? Math.round(b.awayMs) : null,
+  };
+
+  const conflict = { onConflict: "participant_id,block,situation_id" };
+  let { error } = await db.from("trials").upsert(row, conflict);
+  // Red de seguridad: si aún no se ejecutó migration-005.sql, guarda sin away_ms
+  // en lugar de bloquear al participante.
+  if (error && /away_ms/.test(error.message)) {
+    delete row.away_ms;
+    ({ error } = await db.from("trials").upsert(row, conflict));
+  }
 
   if (error) return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
   if ((b.block ?? "main") === "practice") await setStep(p.id, "trials");

@@ -18,7 +18,7 @@ export const dynamic = "force-dynamic";
  * base del estudio. Solo conoce el token y el NPA, y escribe en la base de NPA.
  */
 
-type Status = "available" | "done" | "locked" | "disabled";
+type Status = "available" | "done" | "locked" | "disabled" | "error";
 
 async function status(): Promise<{ status: Status; hash: string | null }> {
   if (!npaEnabled()) return { status: "disabled", hash: null };
@@ -26,7 +26,8 @@ async function status(): Promise<{ status: Status; hash: string | null }> {
   if (jar.get(NPA_DONE_COOKIE)?.value === "1") return { status: "done", hash: null };
   const hash = verifyNpaToken(jar.get(NPA_COOKIE)?.value);
   if (!hash) return { status: "locked", hash: null };
-  const { data } = await npaDb().from("npa_tokens_usados").select("token_hash").eq("token_hash", hash).maybeSingle();
+  const { data, error } = await npaDb().from("npa_tokens_usados").select("token_hash").eq("token_hash", hash).maybeSingle();
+  if (error) return { status: "error", hash: null };
   return data ? { status: "done", hash } : { status: "available", hash };
 }
 

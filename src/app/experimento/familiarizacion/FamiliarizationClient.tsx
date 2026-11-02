@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Shell } from "@/components/Shell";
 import { IaStimulus, HumanStimulus } from "@/components/Stimulus";
 import type { StimulusSet } from "@/data/stimuli";
+import { usePreloadImages } from "@/lib/usePreloadImages";
 
 type Copy = Record<string, string>;
 
@@ -17,6 +18,7 @@ type Copy = Record<string, string>;
 export function FamiliarizationClient({ stimulusSet, copy, backPath }: { stimulusSet: StimulusSet; copy: Copy; backPath: string }) {
   const router = useRouter();
   const [screen, setScreen] = useState(0);
+  usePreloadImages(stimulusSet); // desde la primera pantalla, antes de que aparezcan
 
   function next() {
     if (screen < 2) setScreen((s) => s + 1);

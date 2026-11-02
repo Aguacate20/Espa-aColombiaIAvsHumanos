@@ -6,6 +6,7 @@ import { Shell, Title, Button } from "@/components/Shell";
 import { LikertItem } from "@/components/Likert";
 import { CEIA9 } from "@/data/scales/ceia9";
 import { COPY, type Country } from "@/data/copy";
+import { postJson, SAVE_ERROR } from "@/lib/postJson";
 
 /**
  * CEIA-9 en UNA sección. Es la primera del bloque de cuestionarios; al
@@ -20,10 +21,11 @@ export function Ceia9Form({ country }: { country: Country }) {
 
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const t0 = useRef(performance.now());
 
   useEffect(() => {
-    fetch("/api/scale?scale=CEIA9").then((r) => r.json()).then((j) => { if (j.ok) setAnswers(j.answers ?? {}); }).catch(() => {});
+    fetch("/api/scale?scale=CEIA9").then((r) => r.json()).then((j) => { if (j.ok) setAnswers((prev) => ({ ...(j.answers ?? {}), ...prev })); }).catch(() => {});
   }, []);
 
   const answered = Object.keys(answers).length;
@@ -35,12 +37,15 @@ export function Ceia9Form({ country }: { country: Country }) {
   }
 
   async function submit() {
+    if (busy) return;
     setBusy(true);
-    await fetch("/api/scale", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ scale: "CEIA9", answers, pageRtMs: Math.round(performance.now() - t0.current), nextStepAfter: "scale_hgaits" }),
-    });
+    setError(null);
+    const saved = await postJson("/api/scale", { scale: "CEIA9", answers, pageRtMs: Math.round(performance.now() - t0.current), nextStepAfter: "scale_hgaits" });
+    if (!saved) {
+      setBusy(false);
+      setError(SAVE_ERROR);
+      return;
+    }
     router.push("/escalas/hgaits");
   }
 
@@ -62,6 +67,7 @@ export function Ceia9Form({ country }: { country: Country }) {
         <div className="sticky bottom-0 bg-surface border-t border-line pt-4 pb-4 mt-4 flex items-center gap-3 flex-wrap">
           <a href="/participante" className="inline-flex items-center px-6 py-3 text-[15px] font-medium rounded-sm border border-line text-ink no-underline hover:border-brand hover:text-brand transition-colors">{c.backCta}</a>
           <Button onClick={submit} disabled={!complete || busy}>{busy ? "Guardando…" : c.continueCta}</Button>
+          {error && <p className="w-full text-[14px] text-accent">{error}</p>}
           {!complete && (
             <button type="button" onClick={goToMissing} className="text-[13px] text-accent underline underline-offset-2">
               {c.scaleRemaining.replace("{n}", String(missing.length))} · {c.scaleGoToMissing}

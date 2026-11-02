@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { STUDY_TITLE, STUDY_SUBTITLE, COPY } from "@/data/copy";
 
@@ -20,13 +20,17 @@ export function Landing({ session }: { session: SessionState }) {
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
 
+  const starting = useRef(false);
+
   async function startNew() {
+    if (starting.current) return; // un doble clic crearía dos participaciones
+    starting.current = true;
     setBusy(true);
     setMsg(null);
-    const res = await fetch("/api/participant", { method: "POST" });
-    const j = await res.json().catch(() => ({ ok: false }));
+    const j = await fetch("/api/participant", { method: "POST" }).then((r) => r.json()).catch(() => ({ ok: false }));
     if (j.ok) router.push(j.next);
     else {
+      starting.current = false;
       setBusy(false);
       setMsg("No se pudo continuar. Revisa tu conexión e inténtalo de nuevo.");
     }

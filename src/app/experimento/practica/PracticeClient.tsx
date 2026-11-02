@@ -6,6 +6,7 @@ import { Shell, Title, Lead } from "@/components/Shell";
 import { AgentBeam } from "@/components/AgentBeam";
 import { ConfidenceScale } from "@/components/ConfidenceScale";
 import type { StimulusSet } from "@/data/stimuli";
+import { usePreloadImages } from "@/lib/usePreloadImages";
 
 export function PracticeClient({
   situation, stimulusSet, copy,
@@ -18,6 +19,7 @@ export function PracticeClient({
   const [phase, setPhase] = useState<"choice" | "confidence">("choice");
   const [choice, setChoice] = useState<{ value: number; moves: number; rtMs: number } | null>(null);
   const labels = { ia: copy.agentIa, humano: copy.agentHuman };
+  usePreloadImages(stimulusSet);
 
   async function finish(conf: { value: number; rtMs: number }) {
     await fetch("/api/trial", {

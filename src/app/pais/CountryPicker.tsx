@@ -10,23 +10,29 @@ const c = COPY.CO;
 export function CountryPicker() {
   const router = useRouter();
   const [busy, setBusy] = useState<"CO" | "ES" | null>(null);
+  const [error, setError] = useState(false);
 
   async function choose(country: "CO" | "ES") {
+    if (busy) return;
     setBusy(country);
-    const res = await fetch("/api/country", {
+    setError(false);
+    const j = await fetch("/api/country", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ country }),
-    });
-    const j = await res.json();
+    }).then((r) => r.json()).catch(() => ({ ok: false }));
     if (j.ok) router.push(j.next);
-    else setBusy(null);
+    else {
+      setBusy(null);
+      setError(true);
+    }
   }
 
   return (
     <div className="fade-in">
       <Title>{c.countryTitle}</Title>
       <Lead>{c.countryLead}</Lead>
+      {error && <p className="mb-4 text-[14px] text-accent">No se pudo continuar. Revisa tu conexión e inténtalo de nuevo.</p>}
       <div className="grid sm:grid-cols-2 gap-4">
         {(["CO", "ES"] as const).map((code) => {
           const meta = COUNTRY_META[code];
