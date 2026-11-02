@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { STUDY_TITLE, STUDY_SUBTITLE, COPY } from "@/data/copy";
+import { clearNpaLocal } from "@/lib/npaClient";
 
 const c = COPY.CO; // en el inicio aún no hay país elegido
 
@@ -28,8 +29,10 @@ export function Landing({ session }: { session: SessionState }) {
     setBusy(true);
     setMsg(null);
     const j = await fetch("/api/participant", { method: "POST" }).then((r) => r.json()).catch(() => ({ ok: false }));
-    if (j.ok) router.push(j.next);
-    else {
+    if (j.ok) {
+      clearNpaLocal();
+      router.push(j.next);
+    } else {
       starting.current = false;
       setBusy(false);
       setMsg("No se pudo continuar. Revisa tu conexión e inténtalo de nuevo.");

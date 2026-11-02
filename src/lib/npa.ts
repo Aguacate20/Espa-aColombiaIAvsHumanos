@@ -10,7 +10,9 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
  *  1. Al completar las 27 situaciones, /api/finish emite un token firmado
  *     (nonce aleatorio + HMAC). El token NO se guarda en la base del estudio:
  *     allí solo queda participants.npa_token_issued = true.
- *  2. El token viaja en una cookie httpOnly limitada a la ruta /api/npa.
+ *  2. El token llega al navegador de dos formas redundantes: en la respuesta
+ *     de /api/finish (se guarda en localStorage) y en una cookie httpOnly.
+ *     /api/npa acepta cualquiera de las dos.
  *  3. /api/npa comprueba la firma y escribe en la OTRA base el hash del token
  *     (para que sirva una sola vez) y el NPA, en tablas distintas y sin
  *     ninguna referencia al participante. /api/npa nunca lee la cookie "pid".
@@ -24,7 +26,8 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 export const NPA_COOKIE = "npa_t";
 export const NPA_DONE_COOKIE = "npa_ok";
-const NPA_PATH = "/api/npa";
+// Ruta "/": las cookies limitadas a /api/npa no llegaban en algunos navegadores.
+const NPA_PATH = "/";
 
 export function npaEnabled(): boolean {
   return !!(process.env.NPA_SUPABASE_URL && process.env.NPA_SUPABASE_SERVICE_ROLE_KEY && process.env.NPA_TOKEN_SECRET);
@@ -51,6 +54,12 @@ function sign(nonce: string): string {
 export function makeNpaToken(): string {
   const nonce = b64url(randomBytes(24));
   return `${nonce}.${sign(nonce)}`;
+}
+
+/** Motivo legible cuando el token no sirve (solo para diagnóstico). */
+export function tokenProblem(token: string | undefined | null): "sin_token" | "firma" | null {
+  if (!token) return "sin_token";
+  return verifyNpaToken(token) ? null : "firma";
 }
 
 /** Devuelve el hash a guardar si la firma es válida; null si no. */

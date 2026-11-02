@@ -7,6 +7,7 @@ import { AgentBeam } from "@/components/AgentBeam";
 import { ConfidenceScale } from "@/components/ConfidenceScale";
 import type { StimulusSet } from "@/data/stimuli";
 import { usePreloadImages } from "@/lib/usePreloadImages";
+import { saveNpaToken } from "@/lib/npaClient";
 
 type Agent = "ia" | "humano";
 interface Trial { i: number; id: string; text: string; left: Agent; right: Agent; humanGender: "hombre" | "mujer"; }
@@ -71,7 +72,8 @@ export function TrialsClient({
     }
 
     if (idx + 1 >= trials.length) {
-      await fetch("/api/finish", { method: "POST" }).catch(() => null);
+      const fin = await fetch("/api/finish", { method: "POST" }).then((r) => r.json()).catch(() => null);
+      saveNpaToken(fin?.npaToken);
       router.push("/fin");
       return;
     }

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/Shell";
+import { getNpaToken, markNpaDoneLocal, npaDoneLocal, saveNpaToken } from "@/lib/npaClient";
 
 type Copy = Record<
   | "npaTitle" | "npaLead" | "npaLabel" | "npaRepeat" | "npaMismatch" | "npaInvalid" | "npaSubmit"
@@ -24,13 +25,22 @@ export function NpaBox({ copy }: { copy: Copy }) {
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
 
+  const [reason, setReason] = useState<string | null>(null);
+
   useEffect(() => {
-    // Por si el cierre del último ensayo no llegó al servidor: /api/finish es idempotente.
-    fetch("/api/finish", { method: "POST" })
-      .catch(() => null)
-      .then(() => fetch("/api/npa").then((r) => r.json()))
-      .then((j) => setStatus(j?.status ?? "locked"))
-      .catch(() => setStatus("locked"));
+    (async () => {
+      // Por si el cierre del último ensayo no llegó al servidor: /api/finish es idempotente.
+      const fin = await fetch("/api/finish", { method: "POST" }).then((r) => r.json()).catch(() => null);
+      saveNpaToken(fin?.npaToken);
+      if (npaDoneLocal()) { setStatus("done"); return; }
+      const j = await fetch("/api/npa", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: getNpaToken() }),
+      }).then((r) => r.json()).catch(() => null);
+      setStatus(j?.status ?? "error");
+      setReason(j?.reason ?? null);
+    })();
   }, []);
 
   const a = clean(npa);
@@ -43,12 +53,15 @@ export function NpaBox({ copy }: { copy: Copy }) {
     const j = await fetch("/api/npa", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ npa: a }),
+      body: JSON.stringify({ npa: a, token: getNpaToken() }),
     })
       .then((r) => r.json())
       .catch(() => ({ ok: false, status: "error" }));
     setBusy(false);
-    if (j.ok) setStatus(j.status === "done" ? "done" : "saved");
+    if (j.ok) {
+      markNpaDoneLocal();
+      setStatus(j.status === "done" ? "done" : "saved");
+    }
     else if (j.status === "invalid") setMsg(copy.npaInvalid);
     else if (j.status === "done" || j.status === "locked" || j.status === "disabled") setStatus(j.status);
     else setMsg(copy.npaError);
@@ -84,7 +97,12 @@ export function NpaBox({ copy }: { copy: Copy }) {
 
       {status === "saved" && <p className="text-[15px] text-ink">{copy.npaSaved}</p>}
       {status === "done" && <p className="text-[15px] text-muted">{copy.npaAlready}</p>}
-      {status === "locked" && <p className="text-[15px] text-muted">{copy.npaLocked}</p>}
+      {status === "locked" && (
+        <p className="text-[15px] text-muted">
+          {copy.npaLocked}
+          {reason && <span className="block mt-2 text-[12px] text-muted/80">Código: {reason}</span>}
+        </p>
+      )}
       {status === "disabled" && <p className="text-[15px] text-muted">{copy.npaDisabled}</p>}
       {status === "error" && <p className="text-[15px] text-accent">{copy.npaError}</p>}
     </section>

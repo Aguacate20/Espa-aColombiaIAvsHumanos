@@ -35,10 +35,14 @@ export async function POST() {
       .eq("id", p.id);
   }
 
+  let npaToken: string | undefined;
   if (p.country === "ES" && !p.npa_token_issued && npaEnabled()) {
-    setNpaCookie(makeNpaToken());
+    npaToken = makeNpaToken();
+    setNpaCookie(npaToken);
     await db.from("participants").update({ npa_token_issued: true }).eq("id", p.id);
   }
 
-  return NextResponse.json({ ok: true, complete: true, next: "/fin" });
+  // El token también va en la respuesta: el navegador lo guarda en localStorage
+  // por si la cookie no llega. No se guarda en esta base.
+  return NextResponse.json({ ok: true, complete: true, next: "/fin", npaToken });
 }
