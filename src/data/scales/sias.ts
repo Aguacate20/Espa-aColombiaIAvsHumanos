@@ -36,7 +36,7 @@ export const SIAS: ScaleDef = {
     { code: "SIAS2", subscale: "SIAS", text: bi("Se me hace difícil socializar con las personas con las que trabajo.") },
     { code: "SIAS3", subscale: "SIAS", text: bi("Me tenso si me encuentro algún conocido en la calle.") },
     { code: "SIAS4", subscale: "SIAS", text: bi("Me siento tenso/a si estoy a solas con otra persona.") },
-    { code: "SIAS5", subscale: "SIAS", text: bi("Se me hace difícil platicar con otras personas.") },
+    { code: "SIAS5", subscale: "SIAS", text: bi("Se me hace difícil hablar con otras personas.") },
     { code: "SIAS6", subscale: "SIAS", text: bi("Se me hace difícil estar en desacuerdo con el punto de vista de alguien más.") },
   ],
 };

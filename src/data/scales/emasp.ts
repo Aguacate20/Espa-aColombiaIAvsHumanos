@@ -40,7 +40,7 @@ export const EMASP: ScaleDef = {
     { code: "MSPSS5",  subscale: "SO",  text: bi("Existe una persona que realmente es una fuente de bienestar para mí.") },
     { code: "MSPSS6",  subscale: "FRI", text: bi("Mis amigos realmente tratan de ayudarme.") },
     { code: "MSPSS7",  subscale: "FRI", text: bi("Puedo contar con mis amigos cuando las cosas van mal.") },
-    { code: "MSPSS8",  subscale: "FAM", text: bi("Yo puedo hablar de mis problemas con mi familia.") },
+    { code: "MSPSS8",  subscale: "FAM", text: bi("Puedo hablar de mis problemas con mi familia.") },
     { code: "MSPSS9",  subscale: "FRI", text: bi("Tengo amigos con los que puedo compartir las penas y alegrías.") },
     { code: "MSPSS10", subscale: "SO",  text: bi("Existe una persona especial en mi vida que se preocupa por mis sentimientos.") },
     { code: "MSPSS11", subscale: "FAM", text: bi("Mi familia se muestra dispuesta a ayudarme para tomar decisiones.") },

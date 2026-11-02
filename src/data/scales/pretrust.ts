@@ -37,14 +37,14 @@ const same = (t: string): Record<Country, string> => ({ CO: t, ES: t });
 export const PRE_ANCHORS: string[] = ["Nada", "Poco", "Algo", "Bastante", "Mucho"];
 
 export const PRE_INSTRUCTIONS =
-  "Antes de empezar con los cuestionarios, responda estas cinco preguntas según lo que piensa hoy. Marque la opción que mejor lo describe.";
+  "Antes de empezar con los cuestionarios, responde estas cinco preguntas según lo que piensas hoy. Marca la opción que mejor te describe.";
 
 export const PRE_KNOW: PreItem = {
   code: "PRE_KNOW",
   subscale: "KNOW",
   agent: null,
   domain: null,
-  text: same("¿Qué tanto sabe sobre inteligencia artificial: cómo funciona y qué puede hacer?"),
+  text: same("¿Qué tanto sabes sobre inteligencia artificial: cómo funciona y qué puede hacer?"),
 };
 
 export const PRE_IA_BLOCK: PreItem[] = [
@@ -53,14 +53,14 @@ export const PRE_IA_BLOCK: PreItem[] = [
     subscale: "EPI_IA",
     agent: "ia",
     domain: "epistemico",
-    text: same("¿Qué tanto confía en que un chat de inteligencia artificial le dé respuestas correctas cuando busca información?"),
+    text: same("¿Qué tanto confías en que un chat de inteligencia artificial te dé respuestas correctas cuando buscas información?"),
   },
   {
     code: "PRE_SOC_IA",
     subscale: "SOC_IA",
     agent: "ia",
     domain: "socioemocional",
-    text: same("¿Qué tanto confía en que un chat de inteligencia artificial le ayude cuando necesita apoyo personal o emocional?"),
+    text: same("¿Qué tanto confías en que un chat de inteligencia artificial te ayude cuando necesitas apoyo personal o emocional?"),
   },
 ];
 
@@ -70,14 +70,14 @@ export const PRE_HUM_BLOCK: PreItem[] = [
     subscale: "EPI_HUM",
     agent: "humano",
     domain: "epistemico",
-    text: same("¿Qué tanto confía en que otras personas le den respuestas correctas cuando busca información?"),
+    text: same("¿Qué tanto confías en que otras personas te den respuestas correctas cuando buscas información?"),
   },
   {
     code: "PRE_SOC_HUM",
     subscale: "SOC_HUM",
     agent: "humano",
     domain: "socioemocional",
-    text: same("¿Qué tanto confía en que otras personas le ayuden cuando necesita apoyo personal o emocional?"),
+    text: same("¿Qué tanto confías en que otras personas te ayuden cuando necesitas apoyo personal o emocional?"),
   },
 ];
 

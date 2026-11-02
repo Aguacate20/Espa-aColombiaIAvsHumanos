@@ -76,7 +76,7 @@ export const CEIA9_ITEMS: ScaleItem[] = [
   // --- VS · Vínculo socioemocional ---
   { code: "VS1", subscale: "VS", text: same("A veces siento una conexión personal con la IA tras varias interacciones.") },
   { code: "VS2", subscale: "VS", text: same("Considero a la IA como una compañía con la que puedo conversar sobre asuntos personales.") },
-  { code: "VS3", subscale: "VS", text: same("Me resulta cómodo/a recurrir a la IA cuando necesito desahogarme.") },
+  { code: "VS3", subscale: "VS", text: same("Me resulta cómodo recurrir a la IA cuando necesito desahogarme.") },
   { code: "VS4", subscale: "VS", text: same("En ocasiones me resulta más fácil expresarme con la IA que con otras personas.") },
   { code: "VS5", subscale: "VS", text: same("Siento que la relación con la IA tiene valor emocional para mí, aunque sé que no es humana.") },
   { code: "VS6", subscale: "VS", text: same("Me gustaría que la IA continuara disponible para conversaciones futuras sobre temas emocionales.") },
