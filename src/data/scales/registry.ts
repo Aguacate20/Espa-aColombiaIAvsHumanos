@@ -5,7 +5,7 @@ import { AIAS } from "./aias";
 import { UCLA } from "./ucla";
 import { EMASP } from "./emasp";
 import { SIAS } from "./sias";
-import { ERQ } from "./erq";
+import { DERS } from "./ders";
 import { PRE_ITEMS } from "./pretrust";
 import type { ScaleDef } from "./types";
 
@@ -17,7 +17,7 @@ import type { ScaleDef } from "./types";
  * (/escalas/[scale]) que se configura desde este arreglo. Para reordenar,
  * cambia el orden aquí y en STEPS de flow.ts.
  */
-export const GENERIC_SCALES: ScaleDef[] = [HGAITS, MCS, AIAS, UCLA, EMASP, SIAS, ERQ];
+export const GENERIC_SCALES: ScaleDef[] = [HGAITS, MCS, AIAS, UCLA, EMASP, SIAS, DERS];
 
 export const ALL_SCALES: ScaleDef[] = [CEIA9 as unknown as ScaleDef, ...GENERIC_SCALES];
 
@@ -28,6 +28,11 @@ const ENTRIES: [string, string][] = [];
 for (const s of ALL_SCALES) for (const it of s.items) ENTRIES.push([it.code, it.subscale]);
 for (const it of PRE_ITEMS) ENTRIES.push([it.code, it.subscale]);
 export const SUBSCALE_BY_CODE = new Map<string, string>(ENTRIES);
+
+/** Ítems de puntuación inversa (hoy solo la subescala AWA de la DERS-SF). */
+export const REVERSE_CODES = new Set<string>(
+  ALL_SCALES.flatMap((s) => s.items.filter((it) => it.reverse).map((it) => it.code)),
+);
 
 /** Slug de URL de cada escala genérica: /escalas/hgaits, /escalas/mcs, ... */
 export function scaleSlug(s: ScaleDef): string {

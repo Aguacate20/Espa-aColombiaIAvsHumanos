@@ -18,7 +18,7 @@ export function TrialsClient({
   const router = useRouter();
   const [idx, setIdx] = useState(startIndex);
   const [phase, setPhase] = useState<"choice" | "confidence">("choice");
-  const [choice, setChoice] = useState<{ value: number; moves: number; rtMs: number } | null>(null);
+  const [choice, setChoice] = useState<{ value: number; moves: number; rtMs: number; firstMoveMs: number | null; pointerType: string | null } | null>(null);
   const [saving, setSaving] = useState(false);
 
   const trial = trials[idx];
@@ -33,11 +33,12 @@ export function TrialsClient({
         block: "main", trialIndex: trial.i, situationId: trial.id,
         left: trial.left, right: trial.right, humanGender: trial.humanGender,
         sliderValue: choice?.value ?? 50, sliderMoves: choice?.moves, rtMs: choice?.rtMs,
+        firstMoveMs: choice?.firstMoveMs ?? null, pointerType: choice?.pointerType ?? null,
         confidence: conf.value, confidenceRtMs: conf.rtMs,
       }),
     });
     setSaving(false);
-    if (idx + 1 >= trials.length) { await fetch("/api/finish", { method: "POST" }); router.push("/fin"); return; }
+    if (idx + 1 >= trials.length) { await fetch("/api/finish", { method: "POST" }).catch(() => null); router.push("/fin"); return; }
     setChoice(null); setPhase("choice"); setIdx((i) => i + 1); window.scrollTo({ top: 0 });
   }
 

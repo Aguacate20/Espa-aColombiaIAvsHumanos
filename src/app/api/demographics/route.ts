@@ -16,6 +16,11 @@ export async function POST(req: Request) {
   if (!p) return NextResponse.json({ ok: false, error: "sin sesión" }, { status: 401 });
 
   const b = await req.json();
+  const d = (b.deviceInfo ?? {}) as Record<string, unknown>;
+  const num = (v: unknown) => (typeof v === "number" && Number.isFinite(v) ? v : null);
+  const bool = (v: unknown) => (typeof v === "boolean" ? v : null);
+  const str = (v: unknown, n = 60) => (typeof v === "string" ? v.slice(0, n) : null);
+  const reported = ["pc", "movil", "tableta"].includes(b.deviceReported) ? b.deviceReported : null;
   const stimulusSet = stimulusSetFor(b.gender ?? null, p.seed);
   const plan = p.trial_plan?.length ? p.trial_plan : buildTrialPlan(p.seed);
 
@@ -27,9 +32,25 @@ export async function POST(req: Request) {
       gender_other: b.genderOther ?? null,
       education: b.education ?? null,
       occupation: b.occupation ?? null,
-      email: b.email ?? null,
       ai_use_frequency: b.aiUse ?? null,
       screen_time: b.screenTime ?? null,
+      // ---- dispositivo (ver src/lib/deviceInfo.ts) ----
+      device_reported: reported,
+      device_detected: str(d.deviceDetected, 10),
+      pointer_coarse: bool(d.pointerCoarse),
+      any_pointer_coarse: bool(d.anyPointerCoarse),
+      any_pointer_fine: bool(d.anyPointerFine),
+      hover_none: bool(d.hoverNone),
+      max_touch_points: num(d.maxTouchPoints),
+      screen_w: num(d.screenW),
+      screen_h: num(d.screenH),
+      viewport_w: num(d.viewportW),
+      viewport_h: num(d.viewportH),
+      device_pixel_ratio: num(d.devicePixelRatio),
+      orientation: str(d.orientation, 12),
+      ua_mobile: bool(d.uaMobile),
+      platform: str(d.platform, 40),
+      user_agent: req.headers.get("user-agent")?.slice(0, 400) ?? null,
       stimulus_set: stimulusSet,
       trial_plan: plan,
       current_step: "ceia9",

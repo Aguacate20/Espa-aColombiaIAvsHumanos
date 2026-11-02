@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/supabase";
 import { getParticipant, setStep } from "@/lib/session";
-import { SUBSCALE_BY_CODE } from "@/data/scales/registry";
+import { SUBSCALE_BY_CODE, REVERSE_CODES } from "@/data/scales/registry";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +23,7 @@ export async function POST(req: Request) {
     subscale: SUBSCALE_BY_CODE.get(item_code) ?? null,
     item_code,
     value,
+    reverse_scored: REVERSE_CODES.has(item_code),
     presented_index: order?.[item_code] ?? null,
     page_rt_ms: pageRtMs ?? null,
     answered_at: new Date().toISOString(),

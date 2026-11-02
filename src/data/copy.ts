@@ -18,16 +18,19 @@ const CO = {
     "Este estudio explora a quién prefieren acudir las personas cuando necesitan ayuda: a otra persona o a un sistema de inteligencia artificial. Toma entre 30 y 40 minutos y puedes hacerlo en varias sesiones.",
   landingNoTest: "No es una prueba. No hay respuestas correctas ni incorrectas, y no se evalúa tu desempeño.",
   idTitle: "Empezar",
-  idLead: "Necesitamos estos dos datos únicamente para identificar tu sesión y permitirte retomar el estudio si lo interrumpes.",
-  idName: "Nombre completo",
-  idDocument: "Número de documento de identidad",
-  idNotice:
-    "Al continuar guardamos estos dos datos para identificar tu sesión. En la siguiente pantalla verás el consentimiento informado completo antes de responder nada del estudio.",
-  resumeTitle: "Ya empecé antes",
-  resumeLead: "Ingresa el mismo nombre y documento con los que empezaste y continuarás justo donde quedaste.",
-  resumeCta: "Retomar mi sesión",
-  resumeNotFound: "No encontramos una sesión con esos datos. Revisa que el nombre y el documento sean los mismos que usaste al empezar.",
-  resumeFinished: "Según nuestros registros ya completaste el estudio. Muchas gracias por tu participación.",
+  anonLead:
+    "Tu participación es anónima: no te pediremos tu nombre, tu documento ni ningún dato que permita identificarte.",
+  anonResume:
+    "Si cierras la ventana, podrás continuar donde quedaste abriendo de nuevo este enlace desde el mismo dispositivo y navegador.",
+  startCta: "Empezar",
+  resumeTitle: "Continúa donde quedaste",
+  resumeLead: "En este dispositivo hay una participación sin terminar. Puedes retomarla justo donde la dejaste.",
+  resumeCta: "Continuar",
+  sharedDevice: "¿Eres otra persona y estás usando este mismo dispositivo?",
+  startOtherCta: "Empezar una participación nueva",
+  finishedTitle: "Estudio completado",
+  finishedLink: "Ver la pantalla final",
+  resumeFinished: "En este dispositivo ya se completó el estudio. Muchas gracias por tu participación.",
 
   // ---- país ----
   countryTitle: "¿Desde dónde participas?",
@@ -41,7 +44,8 @@ const CO = {
   demoGenderHelp: "Se usa para seleccionar las imágenes que verás más adelante.",
   demoEducation: "Nivel educativo alcanzado",
   demoOccupation: "Ocupación actual",
-  demoEmail: "Correo electrónico (opcional, solo si quieres recibir los resultados generales)",
+  demoDevice: "¿Desde qué dispositivo estás respondiendo?",
+  demoDeviceHelp: "Te pedimos que respondas todo el estudio desde este mismo dispositivo.",
   demoAiUse: "¿Con qué frecuencia usas herramientas de inteligencia artificial?",
   demoScreenTime: "¿Cuánto tiempo pasas al día frente a pantallas? (celular, computador, televisor, tableta)",
 
@@ -76,20 +80,31 @@ const CO = {
   backCta: "Atrás",
   doneTitle: "Listo. Gracias por participar.",
   doneBody: "Tus respuestas quedaron registradas. Ya puedes cerrar esta ventana.",
+
+  // ---- NPA (solo se muestra en España) ----
+  npaTitle: "Puntos de clase",
+  npaLead:
+    "Si participas en el marco de una asignatura, indica tu NPA para que se te asignen los puntos. Tu NPA se guarda por separado y no tiene ninguna relación con tus respuestas: nadie puede saber qué contestaste.",
+  npaLabel: "Indica tu NPA (Número Personal del Alumno)",
+  npaRepeat: "Repite tu NPA",
+  npaMismatch: "Los dos NPA no coinciden.",
+  npaInvalid: "Revisa el formato: solo letras y números, entre 4 y 20 caracteres.",
+  npaSubmit: "Registrar mi NPA",
+  npaSaved: "Tu NPA ha quedado registrado. ¡Gracias!",
+  npaAlready: "El NPA de esta participación ya se registró.",
+  npaLocked: "El registro del NPA se habilita al completar todas las situaciones del estudio.",
+  npaDisabled: "El registro del NPA no está disponible en este momento. Escribe al correo de contacto del consentimiento.",
+  npaError: "No se pudo registrar. Revisa tu conexión e inténtalo de nuevo.",
 };
 
 const ES: typeof CO = {
   ...CO,
   landingBody:
     "Este estudio explora a quién prefieren acudir las personas cuando necesitan ayuda: a otra persona o a un sistema de inteligencia artificial. Dura entre 30 y 40 minutos y puedes hacerlo en varias sesiones.",
-  idLead: "Necesitamos estos dos datos únicamente para identificar tu sesión y permitirte retomar el estudio si lo interrumpes.",
-  idDocument: "Número de DNI / NIE / pasaporte",
   demoEducation: "Nivel de estudios alcanzado",
   demoScreenTime: "¿Cuánto tiempo pasas al día frente a pantallas? (móvil, ordenador, televisión, tableta)",
   confidenceTitle: "¿Cuánto confías en la opción que has elegido en la situación anterior?",
   doneBody: "Tus respuestas han quedado registradas. Ya puedes cerrar esta ventana.",
-  resumeNotFound: "No hemos encontrado una sesión con esos datos. Revisa que el nombre y el documento sean los mismos que usaste al empezar.",
-  resumeFinished: "Según nuestros registros ya has completado el estudio. Muchas gracias por tu participación.",
 };
 
 export const COPY: Record<Country, typeof CO> = { CO, ES };
@@ -100,14 +115,19 @@ export const OPTIONS: Record<Country, Record<string, string[]>> = {
     education: ["Bachillerato", "Técnico o tecnólogo", "Pregrado en curso", "Pregrado completo", "Especialización", "Maestría", "Doctorado"],
     aiUse: ["Nunca", "Alguna vez al mes", "Varias veces al mes", "Varias veces por semana", "A diario"],
     screenTime: ["Menos de 2 horas", "Entre 2 y 4 horas", "Entre 4 y 6 horas", "Entre 6 y 8 horas", "Entre 8 y 10 horas", "Más de 10 horas"],
+    device: ["Computador (de escritorio o portátil)", "Celular", "Tableta"],
   },
   ES: {
     gender: ["Mujer", "Hombre", "No binario", "Prefiero no decirlo", "Otro"],
     education: ["Bachillerato", "Formación profesional", "Grado en curso", "Grado completado", "Máster", "Doctorado"],
     aiUse: ["Nunca", "Alguna vez al mes", "Varias veces al mes", "Varias veces por semana", "A diario"],
     screenTime: ["Menos de 2 horas", "Entre 2 y 4 horas", "Entre 4 y 6 horas", "Entre 6 y 8 horas", "Entre 8 y 10 horas", "Más de 10 horas"],
+    device: ["Ordenador (de sobremesa o portátil)", "Móvil", "Tableta"],
   },
 };
+
+/** Código que se guarda en participants.device_reported, por posición de la opción. */
+export const DEVICE_CODES = ["pc", "movil", "tableta"] as const;
 
 export function t(country: Country, key: keyof typeof CO): string {
   return COPY[country][key];

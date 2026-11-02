@@ -31,7 +31,7 @@ function baseSections(country: Country): ConsentSection[] {
     {
       heading: "Qué se le pedirá que haga",
       body: [
-        "1. Datos sociodemográficos. Edad, sexo, nivel educativo, ocupación, uso de pantallas y de herramientas de inteligencia artificial. Aproximadamente 3 minutos.",
+        "1. Datos sociodemográficos. Edad, sexo, nivel educativo, ocupación, uso de pantallas y de herramientas de inteligencia artificial, y el tipo de dispositivo desde el que responde. Aproximadamente 3 minutos.",
         "2. Cuestionarios. Una serie de escalas sobre su experiencia con la inteligencia artificial, sus relaciones sociales y la manera en que maneja sus emociones. Se responden marcando la opción que mejor lo describe. Aproximadamente 15 a 20 minutos.",
         "3. Tarea experimental. Verá 27 situaciones cotidianas. En cada una indicará a quién acudiría, moviendo una barra hacia una de dos opciones, y después señalará cuánta confianza tiene en la opción que eligió. Aproximadamente 10 a 15 minutos.",
       ],
@@ -39,14 +39,15 @@ function baseSections(country: Country): ConsentSection[] {
     {
       heading: "Cuánto dura",
       body: [
-        "Entre 30 y 40 minutos en total. No tiene que hacerlo de una sola vez: si cierra la ventana, puede retomar exactamente donde quedó ingresando de nuevo su nombre y número de documento en la página de inicio.",
+        "Entre 30 y 40 minutos en total. No tiene que hacerlo de una sola vez: si cierra la ventana, puede retomar exactamente donde quedó abriendo de nuevo el enlace del estudio desde el mismo dispositivo y navegador.",
       ],
     },
     {
       heading: "Qué información se registra",
       body: [
         "Sus respuestas a los cuestionarios, la posición exacta en la que deja la barra en cada situación y el tiempo que tarda en responder cada pantalla. El tiempo de respuesta forma parte del análisis y por eso le pedimos que responda a su ritmo natural, sin apurarse ni detenerse más de lo necesario.",
-        "No se graba audio ni video. No se accede a su cámara, micrófono, contactos ni archivos. No se recoge información de su dispositivo más allá del tipo de navegador.",
+        "También se registran características técnicas del dispositivo que pueden influir en los tiempos de respuesta: si es un computador, un celular o una tableta; si se usa pantalla táctil o ratón; el tamaño de la pantalla y el tipo de navegador. Estos datos no permiten identificarle.",
+        "No se graba audio ni video. No se accede a su cámara, micrófono, contactos, ubicación ni archivos.",
       ],
     },
     {
@@ -65,8 +66,8 @@ function baseSections(country: Country): ConsentSection[] {
     {
       heading: "Confidencialidad y manejo de los datos",
       body: [
-        "Toda la información se manejará bajo principios de confidencialidad y anonimato. Su nombre y su número de documento se utilizan únicamente para identificar su sesión y permitirle retomar el cuestionario si lo interrumpe.",
-        "Antes de cualquier análisis, sus datos se codifican: se sustituyen su nombre y su documento por un código de participante, de modo que el equipo trabaja sin saber a quién corresponde cada respuesta. Ni su nombre ni su documento aparecerán en ninguna publicación, presentación o base de datos compartida.",
+        "La participación es anónima. No se le pedirá su nombre, su número de documento, su correo ni ningún otro dato que permita identificarle. Su sesión se asocia únicamente a un código de participante generado al azar y guardado en su navegador, que permite retomar el estudio desde el mismo dispositivo.",
+        "Como no se recogen datos identificativos junto con las respuestas, el equipo investigador no puede saber a quién corresponde cada una.",
         "Los datos se almacenan en servidores con acceso restringido y cifrado, y solo el equipo investigador tiene acceso. Los resultados se publicarán de forma agregada, sin que sea posible identificar a ninguna persona. Los datos ya anonimizados podrán depositarse en un repositorio científico de acceso abierto con fines de verificación y reutilización académica.",
       ],
     },
@@ -85,11 +86,18 @@ function baseSections(country: Country): ConsentSection[] {
 
   if (country === "ES") {
     sections.push({
+      heading: "Puntos de clase (NPA)",
+      body: [
+        "Si participa en el marco de una asignatura, al terminar todas las situaciones del estudio podrá indicar su NPA (Número Personal del Alumno) para que se le asignen los puntos de clase. Esa pantalla solo se habilita después de completar el estudio.",
+        "El NPA se guarda por separado de las respuestas, en una tabla independiente, sin ningún código, fecha ni dato que permita relacionarlo con lo que usted respondió. El profesorado recibirá únicamente la lista de NPA de quienes completaron el estudio y no tendrá acceso a ninguna respuesta. Indicar el NPA es voluntario.",
+      ],
+    });
+    sections.push({
       heading: "Protección de datos (Reglamento (UE) 2016/679)",
       body: [
         "Responsable del tratamiento: [PENDIENTE — completar con el responsable designado por la Universitat de València].",
         "Finalidad: realización del estudio científico descrito en este documento. Base jurídica: el consentimiento del interesado (art. 6.1.a RGPD) y el tratamiento con fines de investigación científica (art. 9.2.j RGPD).",
-        "Conservación: los datos identificativos se suprimen una vez finalizada la recogida y codificación; los datos anonimizados se conservan indefinidamente con fines de investigación.",
+        "Conservación: las respuestas se recogen de forma anónima y se conservan con fines de investigación. La lista de NPA se conserva solo hasta que se asignen los puntos de clase y después se suprime.",
         "Derechos: puede ejercer sus derechos de acceso, rectificación, supresión, limitación, portabilidad y oposición escribiendo al correo de contacto, así como presentar una reclamación ante la Agencia Española de Protección de Datos.",
         "Delegado de Protección de Datos: [PENDIENTE — completar con los datos del DPD de la Universitat de València].",
       ],

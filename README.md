@@ -40,7 +40,13 @@ La `service_role` **solo** se usa en los route handlers del servidor. RLS está 
 
 ## 3. Vercel
 
-Importa el repo y añade las dos variables de entorno en Settings → Environment Variables (Production y Preview). Deploy.
+Importa el repo y añade las variables de entorno en Settings → Environment Variables (Production y Preview). Deploy.
+
+| Variable | Para qué |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` | Base del estudio |
+| `NPA_SUPABASE_URL`, `NPA_SUPABASE_SERVICE_ROLE_KEY` | Base **separada** del NPA (España). Ver sección 9. |
+| `NPA_TOKEN_SECRET` | Firma de los tokens que desbloquean el NPA |
 
 Local:
 
@@ -57,7 +63,7 @@ npm run dev
 | Paso | Ruta | Qué pasa |
 |---|---|---|
 | 1 | `/` | Consentimiento |
-| 2 | `/participante` | Datos del participante → crea la fila y la cookie de sesión |
+| 2 | `/participante` | Sociodemográficos + dispositivo (la sesión anónima se crea en `/` con una cookie) |
 | 3 | `/pais` | **Bifurcación Colombia / España** → congela el plan de ensayos |
 | 4 | `/escalas/ceia9` | CEIA-9, 24 ítems en 4 páginas |
 | 5 | `/experimento/familiarizacion` | Presentación de los dos interlocutores |
@@ -120,7 +126,16 @@ En Supabase, SQL Editor:
 ```sql
 select * from v_trials_analysis;                 -- ensayos, formato largo
 select * from scale_responses where scale='CEIA9';
-select code, country, age, gender, education, ai_use_frequency, finished_at from participants;
+select code, country, age, gender, education, ai_use_frequency, device_reported, device_detected, pointer_coarse, finished_at from participants;
 ```
 
 Botón **Download CSV**. Para R/Python, `v_trials_analysis` ya viene lista para el DDM: una fila por ensayo, con `rt_ms`, `choice`, `preference_ia`, `situation_category` y `confidence`.
+
+---
+
+## 9. Anonimato y registro del NPA (España)
+
+- **Sin datos identificativos.** El inicio no pide nombre, documento ni correo. La sesión es un UUID aleatorio en una cookie httpOnly; se retoma desde el mismo dispositivo y navegador. En un equipo compartido, la pantalla de inicio ofrece «Empezar una participación nueva».
+- **NPA en otra base.** Crea un segundo proyecto de Supabase, ejecuta allí `supabase/npa-schema.sql` y pon sus credenciales en `NPA_SUPABASE_URL` / `NPA_SUPABASE_SERVICE_ROLE_KEY`.
+- **Token.** Al guardar la situación 27, `/api/finish` comprueba que estén todas y, solo en España, emite un token firmado (cookie limitada a `/api/npa`). La base del estudio solo guarda `npa_token_issued = true`; la base de NPA guarda el hash del token (para que sirva una vez) y el NPA, en tablas distintas, sin fechas ni referencias al participante.
+- **Para el profesorado:** `select * from v_npa_lista;` en el proyecto de NPA (ordenada por NPA, nunca por orden de llegada). Borra la tabla cuando se hayan asignado los puntos.

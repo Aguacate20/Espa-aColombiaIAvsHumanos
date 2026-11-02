@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
  * un solo arreglo (GENERIC_SCALES) sin desincronizar botones.
  *
  * La primera escala genérica es HGAITS; su "atrás" vuelve a CEIA-9.
- * La última es ERQ; su "siguiente" pasa a la familiarización.
+ * La última es la DERS-SF; su "siguiente" pasa a la familiarización.
  */
 export async function GET(req: Request) {
   const p = await getParticipant();

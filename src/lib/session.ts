@@ -19,9 +19,10 @@ export interface Participant {
   gender: string | null;
   stimulus_set: StimulusSet | null;
   consent: boolean;
+  npa_token_issued: boolean | null;
 }
 
-const SELECT = "id, code, country, seed, trial_plan, current_step, finished_at, gender, stimulus_set, consent";
+const SELECT = "id, code, country, seed, trial_plan, current_step, finished_at, gender, stimulus_set, consent, npa_token_issued";
 
 export async function setParticipantCookie(id: string) {
   cookies().set(COOKIE, id, {
@@ -47,18 +48,4 @@ export async function getParticipant(): Promise<Participant | null> {
 
 export async function setStep(id: string, step: string) {
   await db.from("participants").update({ current_step: step, updated_at: new Date().toISOString() }).eq("id", id);
-}
-
-/** Normaliza el documento para la búsqueda: sin puntos, espacios ni guiones. */
-export function normalizeDocument(raw: string): string {
-  return raw.replace(/[\s.\-_/]/g, "").toUpperCase();
-}
-
-export function normalizeName(raw: string): string {
-  return raw
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/\s+/g, " ")
-    .trim()
-    .toUpperCase();
 }

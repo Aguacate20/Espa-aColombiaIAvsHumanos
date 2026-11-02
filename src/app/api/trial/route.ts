@@ -33,6 +33,8 @@ export async function POST(req: Request) {
       choice: toChoice(preferenceIa),
       slider_moves: b.sliderMoves ?? null,
       rt_ms: b.rtMs ?? null,
+      first_move_ms: typeof b.firstMoveMs === "number" ? Math.round(b.firstMoveMs) : null,
+      input_pointer_type: typeof b.pointerType === "string" ? b.pointerType.slice(0, 12) : null,
       confidence: Math.max(0, Math.min(10, Math.round(b.confidence))),
       confidence_rt_ms: b.confidenceRtMs ?? null,
     },

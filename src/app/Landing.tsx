@@ -5,46 +5,31 @@ import { useRouter } from "next/navigation";
 import { STUDY_TITLE, STUDY_SUBTITLE, COPY } from "@/data/copy";
 
 const c = COPY.CO; // en el inicio aún no hay país elegido
-const field = "w-full border border-line rounded-sm px-3 py-2.5 text-[16px] bg-white";
-const label = "block text-[14px] font-medium text-ink mb-1.5";
 
-export function Landing() {
+export type SessionState = { state: "new" } | { state: "inProgress"; next: string } | { state: "finished" };
+
+const primary =
+  "inline-flex items-center justify-center px-6 py-3 text-[15px] font-medium rounded-sm bg-brand text-white transition-colors hover:bg-ink disabled:opacity-40 disabled:cursor-not-allowed";
+
+/**
+ * Inicio ANÓNIMO: no se pide ningún dato identificativo. La sesión queda en
+ * este navegador (cookie), así que se puede retomar desde el mismo dispositivo.
+ */
+export function Landing({ session }: { session: SessionState }) {
   const router = useRouter();
-  const [mode, setMode] = useState<"start" | "resume">("start");
-  const [fullName, setFullName] = useState("");
-  const [document, setDocument] = useState("");
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
 
-  const ready = fullName.trim().length > 1 && document.trim().length > 2;
-
-  async function start() {
+  async function startNew() {
     setBusy(true);
     setMsg(null);
-    const res = await fetch("/api/participant", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ fullName, document }),
-    });
-    const j = await res.json();
-    setBusy(false);
+    const res = await fetch("/api/participant", { method: "POST" });
+    const j = await res.json().catch(() => ({ ok: false }));
     if (j.ok) router.push(j.next);
-    else setMsg("No se pudo continuar. Inténtalo de nuevo.");
-  }
-
-  async function resume() {
-    setBusy(true);
-    setMsg(null);
-    const res = await fetch("/api/resume", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ fullName, document }),
-    });
-    const j = await res.json();
-    setBusy(false);
-    if (j.ok) router.push(j.next);
-    else if (j.reason === "finished") setMsg(c.resumeFinished);
-    else setMsg(c.resumeNotFound);
+    else {
+      setBusy(false);
+      setMsg("No se pudo continuar. Revisa tu conexión e inténtalo de nuevo.");
+    }
   }
 
   return (
@@ -62,56 +47,49 @@ export function Landing() {
 
       {/* Tarjeta de entrada */}
       <div className="border border-line rounded-lg p-6 sm:p-8 max-w-xl">
-        <div className="flex gap-1 mb-6 border-b border-line">
-          <TabButton active={mode === "start"} onClick={() => { setMode("start"); setMsg(null); }}>
-            {c.idTitle}
-          </TabButton>
-          <TabButton active={mode === "resume"} onClick={() => { setMode("resume"); setMsg(null); }}>
-            {c.resumeTitle}
-          </TabButton>
-        </div>
-
-        <p className="text-[15px] text-muted mb-6">{mode === "start" ? c.idLead : c.resumeLead}</p>
-
-        <div className="grid gap-4">
-          <div>
-            <label className={label} htmlFor="fullName">{c.idName}</label>
-            <input id="fullName" className={field} value={fullName} onChange={(e) => setFullName(e.target.value)} autoComplete="name" />
-          </div>
-          <div>
-            <label className={label} htmlFor="document">{c.idDocument}</label>
-            <input id="document" className={field} value={document} onChange={(e) => setDocument(e.target.value)} inputMode="text" />
-          </div>
-
-          {mode === "start" && <p className="text-[13px] text-muted">{c.idNotice}</p>}
-          {msg && <p className="text-[14px] text-accent">{msg}</p>}
-
-          <div className="pt-1">
-            <button
-              type="button"
-              disabled={!ready || busy}
-              onClick={mode === "start" ? start : resume}
-              className="inline-flex items-center justify-center px-6 py-3 text-[15px] font-medium rounded-sm bg-brand text-white transition-colors hover:bg-ink disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              {busy ? "Un momento…" : mode === "start" ? c.continueCta : c.resumeCta}
+        {session.state === "new" && (
+          <>
+            <h2 className="font-display text-[22px] text-ink mb-3">{c.idTitle}</h2>
+            <p className="text-[15px] text-muted mb-3">{c.anonLead}</p>
+            <p className="text-[13px] text-muted mb-6">{c.anonResume}</p>
+            <button type="button" disabled={busy} onClick={startNew} className={primary}>
+              {busy ? "Un momento…" : c.startCta}
             </button>
-          </div>
-        </div>
+          </>
+        )}
+
+        {session.state === "inProgress" && (
+          <>
+            <h2 className="font-display text-[22px] text-ink mb-3">{c.resumeTitle}</h2>
+            <p className="text-[15px] text-muted mb-6">{c.resumeLead}</p>
+            <button type="button" disabled={busy} onClick={() => router.push(session.next)} className={primary}>
+              {c.resumeCta}
+            </button>
+            <div className="mt-6 border-t border-line pt-4">
+              <p className="text-[13px] text-muted mb-2">{c.sharedDevice}</p>
+              <button type="button" disabled={busy} onClick={startNew} className="text-[14px] text-brand underline underline-offset-2 disabled:opacity-40">
+                {c.startOtherCta}
+              </button>
+            </div>
+          </>
+        )}
+
+        {session.state === "finished" && (
+          <>
+            <h2 className="font-display text-[22px] text-ink mb-3">{c.finishedTitle}</h2>
+            <p className="text-[15px] text-muted mb-6">{c.resumeFinished}</p>
+            <a href="/fin" className="text-[14px] text-brand underline underline-offset-2">{c.finishedLink}</a>
+            <div className="mt-6 border-t border-line pt-4">
+              <p className="text-[13px] text-muted mb-2">{c.sharedDevice}</p>
+              <button type="button" disabled={busy} onClick={startNew} className="text-[14px] text-brand underline underline-offset-2 disabled:opacity-40">
+                {c.startOtherCta}
+              </button>
+            </div>
+          </>
+        )}
+
+        {msg && <p className="mt-4 text-[14px] text-accent">{msg}</p>}
       </div>
     </div>
-  );
-}
-
-function TabButton({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`px-4 py-2.5 text-[14px] font-medium -mb-px border-b-2 transition-colors ${
-        active ? "border-brand text-brand" : "border-transparent text-muted hover:text-ink"
-      }`}
-    >
-      {children}
-    </button>
   );
 }

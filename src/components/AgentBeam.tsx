@@ -32,7 +32,7 @@ export function AgentBeam({
   labels: Record<Agent, string>;
   stimulusSet: StimulusSet;
   humanGender: "hombre" | "mujer";
-  onCommit: (v: { value: number; moves: number; rtMs: number }) => void;
+  onCommit: (v: { value: number; moves: number; rtMs: number; firstMoveMs: number | null; pointerType: string | null }) => void;
   hint: string;
   untouchedHint: string;
   cta: string;
@@ -41,12 +41,18 @@ export function AgentBeam({
   const [touched, setTouched] = useState(false);
   const moves = useRef(0);
   const t0 = useRef(0);
+  // Para el DDM: tiempo hasta el PRIMER movimiento y modalidad de entrada
+  // (PointerEvent.pointerType: "mouse" | "touch" | "pen"; "keyboard" si se usa el teclado).
+  const firstMove = useRef<number | null>(null);
+  const pointerType = useRef<string | null>(null);
 
   useEffect(() => {
     t0.current = performance.now();
     setValue(50);
     setTouched(false);
     moves.current = 0;
+    firstMove.current = null;
+    pointerType.current = null;
   }, [left, right, humanGender]);
 
   const offset = value - 50; // -50..50
@@ -96,7 +102,15 @@ export function AgentBeam({
           data-untouched={!touched}
           aria-label={hint}
           aria-valuetext={!touched ? "sin respuesta" : offset === 0 ? "en el centro" : offset < 0 ? labels[left] : labels[right]}
+          onPointerDown={(e) => {
+            if (!pointerType.current) pointerType.current = e.pointerType || null;
+            if (firstMove.current === null) firstMove.current = Math.round(performance.now() - t0.current);
+          }}
+          onKeyDown={() => {
+            if (!pointerType.current) pointerType.current = "keyboard";
+          }}
           onChange={(e) => {
+            if (firstMove.current === null) firstMove.current = Math.round(performance.now() - t0.current);
             setValue(Number(e.target.value));
             if (!touched) setTouched(true);
             moves.current += 1;
@@ -112,7 +126,15 @@ export function AgentBeam({
         <button
           type="button"
           disabled={!touched}
-          onClick={() => onCommit({ value, moves: moves.current, rtMs: Math.round(performance.now() - t0.current) })}
+          onClick={() =>
+            onCommit({
+              value,
+              moves: moves.current,
+              rtMs: Math.round(performance.now() - t0.current),
+              firstMoveMs: firstMove.current,
+              pointerType: pointerType.current,
+            })
+          }
           className="inline-flex items-center justify-center px-8 py-3 text-[15px] font-medium rounded-sm bg-brand text-white transition-colors hover:bg-ink disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {cta}

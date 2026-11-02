@@ -3,7 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { Title, Lead, Button } from "@/components/Shell";
-import { COPY, OPTIONS, type Country } from "@/data/copy";
+import { COPY, OPTIONS, DEVICE_CODES, type Country } from "@/data/copy";
+import { collectDeviceInfo } from "@/lib/deviceInfo";
 
 const field = "w-full border border-line rounded-sm px-3 py-2.5 text-[16px] bg-white";
 const label = "block text-[14px] font-medium text-ink mb-1.5";
@@ -24,7 +25,7 @@ export function DemographicsForm({
   const o = OPTIONS[country];
 
   const [form, setForm] = useState({
-    age: "", gender: "", genderOther: "", education: "", occupation: "", email: "", aiUse: "", screenTime: "",
+    age: "", gender: "", genderOther: "", education: "", occupation: "", aiUse: "", screenTime: "", device: "",
   });
   const [pre, setPre] = useState<Record<string, number>>({});
   const [busy, setBusy] = useState(false);
@@ -35,7 +36,7 @@ export function DemographicsForm({
 
   const ageOk = Number(form.age) >= 18 && Number(form.age) <= 99;
   const preComplete = preItems.every((it) => pre[it.code] !== undefined);
-  const ready = ageOk && form.gender && form.education && form.aiUse && form.screenTime && preComplete;
+  const ready = ageOk && form.gender && form.education && form.aiUse && form.screenTime && form.device && preComplete;
   const order = useMemo(() => Object.fromEntries(preItems.map((it, i) => [it.code, i])), [preItems]);
 
   async function submit() {
@@ -44,7 +45,12 @@ export function DemographicsForm({
     const demo = await fetch("/api/demographics", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...form, age: Number(form.age) }),
+      body: JSON.stringify({
+        ...form,
+        age: Number(form.age),
+        deviceReported: DEVICE_CODES[o.device.indexOf(form.device)] ?? null,
+        deviceInfo: collectDeviceInfo(),
+      }),
     }).then((r) => r.json());
 
     if (!demo.ok) { setError("No se pudo guardar. Revisa tu conexión e inténtalo otra vez."); setBusy(false); return; }
@@ -110,8 +116,12 @@ export function DemographicsForm({
         </div>
 
         <div>
-          <label className={label} htmlFor="email">{c.demoEmail}</label>
-          <input id="email" type="email" className={field} value={form.email} onChange={set("email")} />
+          <label className={label} htmlFor="device">{c.demoDevice}</label>
+          <select id="device" className={field} value={form.device} onChange={set("device")}>
+            <option value="">Selecciona una opción</option>
+            {o.device.map((g) => <option key={g} value={g}>{g}</option>)}
+          </select>
+          <p className="mt-1.5 text-[12px] text-muted">{c.demoDeviceHelp}</p>
         </div>
       </div>
 

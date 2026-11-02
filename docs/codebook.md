@@ -50,6 +50,36 @@ Los ids están intercalados deliberadamente: el número no guarda relación con 
 
 Likert 1–5. Sin ítems inversos. Se registra `page_rt_ms` por página (6 ítems).
 
+## DERS-SF (`scale = 'DERSSF'`, sustituye a ERQ10)
+
+Mismos 18 ítems en los dos países; cambia la redacción validada: CO = Navarro et al. (2021), ES = Gómez-Simón et al. (2014). Likert 1–5 (casi nunca → casi siempre). Puntuación alta = más dificultad.
+
+| Subescala | Ítems (código · ítem DERS-36) | Constructo |
+|---|---|---|
+| AWA | DERS1 [2], DERS4 [8], DERS6 [10] — **inversos** (`reverse_scored = true`, recodificar 6 − valor) | Falta de conciencia emocional |
+| CLA | DERS2 [4], DERS3 [5], DERS5 [9] | Falta de claridad |
+| NAC | DERS7 [12], DERS12 [25], DERS16 [29] | No aceptación |
+| GOA | DERS8 [13], DERS11 [18], DERS13 [26] | Dificultad con metas |
+| IMP | DERS9 [14], DERS14 [27], DERS17 [32] | Dificultad con impulsos |
+| STR | DERS10 [16], DERS15 [28], DERS18 [35] | Acceso limitado a estrategias |
+
+`value` guarda siempre la respuesta cruda; `v_scale_scores` ya aplica la recodificación. AWA suele mostrar baja fiabilidad y baja correlación con el resto (Navarro et al., 2021): analizarla aparte del total.
+
+## Dispositivo (`participants`, registrado tras el consentimiento)
+
+| Columna | Origen | Nota |
+|---|---|---|
+| `device_reported` | Pregunta al participante | pc / movil / tableta |
+| `device_detected` | Clasificación automática | pc / movil / tableta, a partir del puntero, la pantalla y el user agent |
+| `pointer_coarse` | `matchMedia('(pointer: coarse)')` | true = puntero principal táctil |
+| `any_pointer_coarse` / `any_pointer_fine` | `matchMedia('(any-pointer: …)')` | detecta equipos con táctil y ratón |
+| `hover_none` | `matchMedia('(hover: none)')` | |
+| `max_touch_points` | `navigator.maxTouchPoints` | |
+| `screen_w/h`, `viewport_w/h` | px CSS | tamaño de pantalla y del área visible al responder |
+| `device_pixel_ratio`, `orientation`, `ua_mobile`, `platform`, `user_agent` | navegador | |
+
+Sugerencia de covariable para el DDM: `device_reported`; contrastar con `device_detected` y `pointer_coarse` para detectar respuestas incoherentes.
+
 ## Variables de `trials`
 
 | Columna | Rango | Nota |
@@ -57,7 +87,9 @@ Likert 1–5. Sin ítems inversos. Se registra `page_rt_ms` por página (6 ítem
 | `slider_value` | 0–100 | Posición cruda. 0 = extremo izquierdo **de la pantalla**. Depende del lado: no usar directamente. |
 | `preference_ia` | 0–100 | Ya corregido por el lado. 100 = máxima preferencia por la IA. **Esta es la variable de análisis.** |
 | `choice` | ia / humano / neutral | Dicotomización de `preference_ia` respecto a 50. |
-| `rt_ms` | ms | Desde el render de la situación hasta confirmar la elección. Entrada del DDM. |
+| `rt_ms` | ms | Desde el render de la situación hasta confirmar la elección (incluye el arrastre). |
+| `first_move_ms` | ms | Desde el render hasta el **primer** movimiento del slider. Alternativa de RT para el DDM sin el tiempo motor del arrastre. |
+| `input_pointer_type` | mouse / touch / pen / keyboard | Modalidad con la que se movió el slider en ese ensayo. |
 | `slider_moves` | entero | Número de ajustes antes de confirmar. Proxy de vacilación. |
 | `confidence` | 0–10 | Confianza declarada en la opción elegida. |
 | `confidence_rt_ms` | ms | Latencia de la valoración de confianza. |

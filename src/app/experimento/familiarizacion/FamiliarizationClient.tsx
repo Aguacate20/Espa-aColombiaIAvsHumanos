@@ -14,7 +14,7 @@ type Copy = Record<string, string>;
  *  1 — el interlocutor IA, con imagen y descripción
  *  2 — el interlocutor humano, con las dos variantes alternables
  */
-export function FamiliarizationClient({ stimulusSet, copy }: { stimulusSet: StimulusSet; copy: Copy }) {
+export function FamiliarizationClient({ stimulusSet, copy, backPath }: { stimulusSet: StimulusSet; copy: Copy; backPath: string }) {
   const router = useRouter();
   const [screen, setScreen] = useState(0);
 
@@ -24,7 +24,7 @@ export function FamiliarizationClient({ stimulusSet, copy }: { stimulusSet: Stim
   }
   function back() {
     if (screen > 0) setScreen((s) => s - 1);
-    else router.push("/escalas/ceia9");
+    else router.push(backPath);
   }
 
   const progress = 0.5 + 0.02 * screen;
