@@ -38,9 +38,10 @@ export const SITUATIONS: Situation[] = [
   {
     id: "S11",
     category: "epistemica",
+    adapted: true,
     text: {
       CO: "Dejé un alimento fuera de la nevera toda la noche y quiero saber si todavía se puede comer.",
-      ES: "Dejé un alimento fuera de la nevera toda la noche y quiero saber si todavía se puede comer.",
+      ES: "Me he dejado un alimento fuera de la nevera toda la noche y quiero saber si todavía se puede comer.",
     },
   },
   {
@@ -64,8 +65,8 @@ export const SITUATIONS: Situation[] = [
     category: "epistemica",
     adapted: true,
     text: {
-      CO: "Quiero sembrar un árbol de mango en casa.",
-      ES: "Quiero plantar un árbol frutal en casa.",
+      CO: "Quiero sembrar un limonero en casa y no sé qué cuidados necesita.",
+      ES: "Quiero plantar un limonero en casa y no sé qué cuidados necesita.",
     },
   },
   {
@@ -95,6 +96,7 @@ export const SITUATIONS: Situation[] = [
   {
     id: "S13",
     category: "epistemica",
+    adapted: true,
     text: {
       CO: "Me ofrecieron un trabajo y quiero saber si me conviene aceptarlo.",
       ES: "Me han ofrecido un trabajo y quiero saber si me conviene aceptarlo.",
@@ -121,17 +123,18 @@ export const SITUATIONS: Situation[] = [
   {
     id: "S01",
     category: "mediacion",
+    adapted: true,
     text: {
       CO: "Discutí con alguien y no logro entender por qué reaccionó como reaccionó. Quiero pensarlo mejor antes de volver a hablar con esa persona.",
-      ES: "Discutí con alguien y no logro entender por qué reaccionó como reaccionó. Quiero pensarlo mejor antes de volver a hablar con esa persona.",
+      ES: "He discutido con alguien y no logro entender por qué ha reaccionado así. Quiero pensarlo mejor antes de volver a hablar con esa persona.",
     },
   },
   {
     id: "S17",
     category: "mediacion",
     text: {
-      CO: "Quiero decirle algo importante a alguien y no estoy seguro de que vaya a entenderlo como yo lo pienso. Quiero revisarlo antes.",
-      ES: "Quiero decirle algo importante a alguien y no estoy seguro de que vaya a entenderlo como yo lo pienso. Quiero revisarlo antes.",
+      CO: "Quiero decirle algo importante a alguien y no tengo claro que lo vaya a entender como yo lo pienso. Quiero revisarlo antes.",
+      ES: "Quiero decirle algo importante a alguien y no tengo claro que lo vaya a entender como yo lo pienso. Quiero revisarlo antes.",
     },
   },
   {
@@ -145,9 +148,10 @@ export const SITUATIONS: Situation[] = [
   {
     id: "S25",
     category: "mediacion",
+    adapted: true,
     text: {
       CO: "Estoy a mitad de un intercambio de mensajes con alguien y no me queda claro qué me está queriendo decir en realidad.",
-      ES: "Estoy a mitad de un intercambio de mensajes con alguien y no me queda claro qué me está queriendo decir en realidad.",
+      ES: "Estoy a mitad de un intercambio de mensajes con alguien y no me queda claro qué me quiere decir en realidad.",
     },
   },
   {
@@ -161,17 +165,18 @@ export const SITUATIONS: Situation[] = [
   {
     id: "S12",
     category: "mediacion",
+    adapted: true,
     text: {
       CO: "Ya hablé con alguien y quedó algo mal dicho de mi parte. Quiero pensar cómo lo aclaro.",
-      ES: "Ya hablé con alguien y quedó algo mal dicho por mi parte. Quiero pensar cómo lo aclaro.",
+      ES: "Ya he hablado con alguien y quedó algo mal dicho por mi parte. Quiero pensar cómo aclararlo.",
     },
   },
   {
     id: "S27",
     category: "mediacion",
     text: {
-      CO: "Terminé una conversación con alguien y no sé si dejar el tema ahí o volver a sacarlo más adelante.",
-      ES: "Terminé una conversación con alguien y no sé si dejar el tema ahí o volver a sacarlo más adelante.",
+      CO: "Acabo de terminar una conversación con alguien y no sé si dejar el tema ahí o volver a sacarlo más adelante.",
+      ES: "Acabo de terminar una conversación con alguien y no sé si dejar el tema ahí o volver a sacarlo más adelante.",
     },
   },
 
@@ -179,9 +184,10 @@ export const SITUATIONS: Situation[] = [
   {
     id: "S14",
     category: "autotelica",
+    adapted: true,
     text: {
       CO: "Tengo ganas de conversar largo con alguien, sin más motivo que la conversación misma.",
-      ES: "Tengo ganas de conversar largo con alguien, sin más motivo que la conversación misma.",
+      ES: "Tengo ganas de charlar un buen rato con alguien, sin más motivo que la propia conversación.",
     },
   },
   {
@@ -203,14 +209,16 @@ export const SITUATIONS: Situation[] = [
   {
     id: "S10",
     category: "autotelica",
+    adapted: true,
     text: {
-      CO: "Voy a estar un buen rato en algo rutinario y quisiera tener con quién estar, aunque no estemos hablando todo el tiempo.",
-      ES: "Voy a estar un buen rato en algo rutinario y me gustaría tener con quién estar, aunque no estemos hablando todo el tiempo.",
+      CO: "Voy a pasar un buen rato haciendo algo rutinario y quisiera tener con quién estar, aunque no estemos hablando todo el tiempo.",
+      ES: "Voy a pasar un buen rato haciendo algo rutinario y me gustaría tener con quién estar, aunque no estemos hablando todo el tiempo.",
     },
   },
   {
     id: "S18",
     category: "autotelica",
+    adapted: true,
     text: {
       CO: "Quiero contarle a alguien cómo estuvo mi día y que el otro también me cuente el suyo.",
       ES: "Quiero contarle a alguien qué tal me ha ido el día y que el otro también me cuente el suyo.",
@@ -236,8 +244,8 @@ export const SITUATIONS: Situation[] = [
     id: "S16",
     category: "autotelica",
     text: {
-      CO: "Quiero tener a alguien ahí mientras paso el rato, sin plan ninguno, y que la cosa siga sola hacia donde vaya.",
-      ES: "Quiero tener a alguien ahí mientras paso el rato, sin plan ninguno, y que la cosa siga sola hacia donde vaya.",
+      CO: "Quiero tener a alguien ahí mientras paso el rato, sin ningún plan, y que la cosa siga sola hacia donde vaya.",
+      ES: "Quiero tener a alguien ahí mientras paso el rato, sin ningún plan, y que la cosa siga sola hacia donde vaya.",
     },
   },
   {

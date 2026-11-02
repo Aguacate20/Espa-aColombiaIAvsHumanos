@@ -18,7 +18,7 @@ export const HGAITS: ScaleDef = {
   id: "HGAITS",
   title: bi("Confianza en la inteligencia artificial"),
   instructions: co_es(
-    `Estas afirmaciones evalúan la confianza en sistemas de inteligencia artificial (como ChatGPT, Gemini, Claude, etc.). No hay respuestas correctas ni incorrectas: marque la opción que mejor refleje su punto de vista en cada caso.`,
+    `Estas afirmaciones evalúan la confianza en sistemas de inteligencia artificial (como ChatGPT, Gemini, Claude, etc.). No hay respuestas correctas ni incorrectas: marca la opción que mejor refleje tu punto de vista en cada caso.`,
     `Estas afirmaciones evalúan la confianza en sistemas de inteligencia artificial (como ChatGPT, Gemini, Claude, etc.). No hay respuestas correctas ni incorrectas: marca la opción que mejor refleje tu punto de vista en cada caso.`,
   ),
   scaleNote: bi("Escala de 1 (totalmente en desacuerdo) a 5 (totalmente de acuerdo)."),
@@ -26,14 +26,14 @@ export const HGAITS: ScaleDef = {
     CO: [
       { value: 1, label: "Totalmente en desacuerdo" },
       { value: 2, label: "En desacuerdo" },
-      { value: 3, label: "Indeciso" },
+      { value: 3, label: "Ni de acuerdo ni en desacuerdo" },
       { value: 4, label: "De acuerdo" },
       { value: 5, label: "Totalmente de acuerdo" },
     ],
     ES: [
       { value: 1, label: "Totalmente en desacuerdo" },
       { value: 2, label: "En desacuerdo" },
-      { value: 3, label: "Indeciso" },
+      { value: 3, label: "Ni de acuerdo ni en desacuerdo" },
       { value: 4, label: "De acuerdo" },
       { value: 5, label: "Totalmente de acuerdo" },
     ],

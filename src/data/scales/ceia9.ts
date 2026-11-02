@@ -43,9 +43,9 @@ export const CEIA9_ANCHORS: Record<Country, string[]> = {
 
 export const CEIA9_INSTRUCTIONS: Record<Country, string> = {
   CO:
-    "A continuación encontrará una serie de afirmaciones sobre su interacción con sistemas de inteligencia artificial (por ejemplo, asistentes virtuales tipo ChatGPT, chatbots de ayuda, aplicaciones de bienestar). Indique en qué medida está de acuerdo con cada afirmación según su experiencia personal. Responda con sinceridad: no existen respuestas correctas o incorrectas.",
+    "A continuación encontrarás una serie de afirmaciones sobre tu interacción con sistemas de inteligencia artificial (por ejemplo, asistentes virtuales tipo ChatGPT, chatbots de ayuda, aplicaciones de bienestar). Indica en qué medida estás de acuerdo con cada afirmación según tu experiencia personal. Responde con sinceridad: no existen respuestas correctas o incorrectas.",
   ES:
-    "A continuación encontrará una serie de afirmaciones sobre su interacción con sistemas de inteligencia artificial (por ejemplo, asistentes virtuales tipo ChatGPT, chatbots de ayuda, aplicaciones de bienestar). Indique en qué medida está de acuerdo con cada afirmación según su experiencia personal. Responda con sinceridad: no existen respuestas correctas o incorrectas.",
+    "A continuación encontrarás una serie de afirmaciones sobre tu interacción con sistemas de inteligencia artificial (por ejemplo, asistentes virtuales tipo ChatGPT, chatbots de ayuda, aplicaciones de bienestar). Indica en qué medida estás de acuerdo con cada afirmación según tu experiencia personal. Responde con sinceridad: no existen respuestas correctas o incorrectas.",
 };
 
 export const CEIA9_ITEMS: ScaleItem[] = [

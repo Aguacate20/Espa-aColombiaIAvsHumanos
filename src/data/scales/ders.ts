@@ -19,6 +19,9 @@ import { ScaleDef } from "./types";
  * Orden de presentación: el del instrumento original (número entre corchetes
  * = ítem de la DERS-36 de Gratz y Roemer, 2004).
  *
+ * Adaptación: se añade la forma femenina («molesto/a», «deprimido/a»…), como en el
+ * resto de escalas del protocolo; el resto del texto es el validado.
+ *
  * Nota: Navarro et al. no confirmaron la fiabilidad de AWA en Colombia; la
  * literatura recomienda analizarla por separado del total.
  */
@@ -45,7 +48,7 @@ export const DERS: ScaleDef = {
   id: "DERSSF",
   title: { CO: "Cómo manejas tus emociones", ES: "Cómo manejas tus emociones" },
   instructions: {
-    CO: "Por favor, indique con qué frecuencia se aplica a usted cada una de las siguientes afirmaciones.",
+    CO: "Indica con qué frecuencia te ocurre cada una de las siguientes afirmaciones.",
     ES: "Indica con qué frecuencia te ocurre cada una de las siguientes afirmaciones.",
   },
   scaleNote: { CO: NOTE, ES: NOTE },
@@ -55,19 +58,19 @@ export const DERS: ScaleDef = {
     /* [4]  */ it("DERS2",  "CLA", "No sé cómo me siento", "No tengo ni idea de cómo me siento"),
     /* [5]  */ it("DERS3",  "CLA", "Me cuesta entender mis sentimientos", "Me cuesta entender mis sentimientos"),
     /* [8]  */ it("DERS4",  "AWA", "Le doy importancia a lo que estoy sintiendo", "Le doy importancia a lo que estoy sintiendo", true),
-    /* [9]  */ it("DERS5",  "CLA", "Estoy confuso sobre lo que siento", "Estoy confuso sobre lo que siento"),
-    /* [10] */ it("DERS6",  "AWA", "Cuando estoy molesto, sé reconocer cuáles son mis emociones", "Cuando estoy molesto, sé reconocer cuáles son mis emociones (si es rabia, si es decepción…)", true),
-    /* [12] */ it("DERS7",  "NAC", "Cuando estoy molesto, me da vergüenza sentirme de esa manera", "Cuando estoy molesto, me da vergüenza sentirme de esa manera"),
-    /* [13] */ it("DERS8",  "GOA", "Cuando estoy molesto, me cuesta terminar el trabajo", "Cuando estoy molesto, me cuesta terminar el trabajo"),
-    /* [14] */ it("DERS9",  "IMP", "Cuando estoy molesto, pierdo el control", "Cuando estoy molesto, pierdo el control"),
-    /* [16] */ it("DERS10", "STR", "Cuando estoy molesto, creo que acabaré sintiéndome muy deprimido", "Cuando estoy molesto, creo que acabaré sintiéndome muy deprimido"),
-    /* [18] */ it("DERS11", "GOA", "Cuando estoy molesto, me cuesta centrarme en otras cosas", "Cuando estoy molesto, me cuesta centrarme en otras cosas"),
-    /* [25] */ it("DERS12", "NAC", "Cuando estoy molesto, me siento culpable por sentirme de esa manera", "Cuando estoy molesto, me siento culpable por sentirme de esta manera"),
-    /* [26] */ it("DERS13", "GOA", "Cuando estoy molesto, me cuesta concentrarme", "Cuando estoy molesto, me cuesta concentrarme"),
-    /* [27] */ it("DERS14", "IMP", "Cuando estoy molesto, me cuesta controlar mi comportamiento", "Cuando estoy molesto, me cuesta controlar mi comportamiento"),
-    /* [28] */ it("DERS15", "STR", "Cuando estoy molesto, creo que no hay nada que pueda hacer para sentirme mejor", "Cuando estoy molesto, creo que no hay nada que pueda hacer para conseguir sentirme mejor"),
-    /* [29] */ it("DERS16", "NAC", "Cuando estoy molesto, me enfado conmigo mismo por sentirme de esa manera", "Cuando estoy molesto, me enfado conmigo mismo por sentirme de esa manera"),
-    /* [32] */ it("DERS17", "IMP", "Cuando estoy molesto, pierdo el control sobre mi comportamiento", "Cuando estoy molesto, pierdo el control sobre mi comportamiento"),
-    /* [35] */ it("DERS18", "STR", "Cuando estoy molesto, tardo mucho tiempo en sentirme mejor", "Cuando estoy molesto, tardo mucho tiempo en sentirme mejor"),
+    /* [9]  */ it("DERS5",  "CLA", "Estoy confuso/a sobre lo que siento", "Estoy confuso/a sobre lo que siento"),
+    /* [10] */ it("DERS6",  "AWA", "Cuando estoy molesto/a, sé reconocer cuáles son mis emociones", "Cuando estoy molesto/a, sé reconocer cuáles son mis emociones (si es rabia, si es decepción…)", true),
+    /* [12] */ it("DERS7",  "NAC", "Cuando estoy molesto/a, me da vergüenza sentirme de esa manera", "Cuando estoy molesto/a, me da vergüenza sentirme de esa manera"),
+    /* [13] */ it("DERS8",  "GOA", "Cuando estoy molesto/a, me cuesta terminar el trabajo", "Cuando estoy molesto/a, me cuesta terminar el trabajo"),
+    /* [14] */ it("DERS9",  "IMP", "Cuando estoy molesto/a, pierdo el control", "Cuando estoy molesto/a, pierdo el control"),
+    /* [16] */ it("DERS10", "STR", "Cuando estoy molesto/a, creo que acabaré sintiéndome muy deprimido/a", "Cuando estoy molesto/a, creo que acabaré sintiéndome muy deprimido/a"),
+    /* [18] */ it("DERS11", "GOA", "Cuando estoy molesto/a, me cuesta centrarme en otras cosas", "Cuando estoy molesto/a, me cuesta centrarme en otras cosas"),
+    /* [25] */ it("DERS12", "NAC", "Cuando estoy molesto/a, me siento culpable por sentirme de esa manera", "Cuando estoy molesto/a, me siento culpable por sentirme de esta manera"),
+    /* [26] */ it("DERS13", "GOA", "Cuando estoy molesto/a, me cuesta concentrarme", "Cuando estoy molesto/a, me cuesta concentrarme"),
+    /* [27] */ it("DERS14", "IMP", "Cuando estoy molesto/a, me cuesta controlar mi comportamiento", "Cuando estoy molesto/a, me cuesta controlar mi comportamiento"),
+    /* [28] */ it("DERS15", "STR", "Cuando estoy molesto/a, creo que no hay nada que pueda hacer para sentirme mejor", "Cuando estoy molesto/a, creo que no hay nada que pueda hacer para conseguir sentirme mejor"),
+    /* [29] */ it("DERS16", "NAC", "Cuando estoy molesto/a, me enfado conmigo mismo/a por sentirme de esa manera", "Cuando estoy molesto/a, me enfado conmigo mismo/a por sentirme de esa manera"),
+    /* [32] */ it("DERS17", "IMP", "Cuando estoy molesto/a, pierdo el control sobre mi comportamiento", "Cuando estoy molesto/a, pierdo el control sobre mi comportamiento"),
+    /* [35] */ it("DERS18", "STR", "Cuando estoy molesto/a, tardo mucho tiempo en sentirme mejor", "Cuando estoy molesto/a, tardo mucho tiempo en sentirme mejor"),
   ],
 };

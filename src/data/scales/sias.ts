@@ -11,7 +11,7 @@ export const SIAS: ScaleDef = {
   id: "SIAS6",
   title: bi("En situaciones sociales"),
   instructions: {
-    CO: "Para cada frase, indique en qué grado es cierta para usted.",
+    CO: "Para cada frase, indica en qué grado es cierta para ti.",
     ES: "Para cada frase, indica en qué grado es cierta para ti.",
   },
   scaleNote: bi("Escala de 0 (nada) a 4 (totalmente)."),

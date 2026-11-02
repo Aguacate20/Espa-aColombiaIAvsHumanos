@@ -13,7 +13,7 @@ export const AIAS: ScaleDef = {
   id: "AIAS",
   title: bi("Tu vínculo con la inteligencia artificial"),
   instructions: co_es(
-    `La inteligencia artificial generativa produce texto, imágenes u otros contenidos a partir de lo que usted escribe (por ejemplo ChatGPT, Replika, DALL·E, DeepSeek). Piense en el sistema o los sistemas de IA generativa que usa con más frecuencia e indique cuánto está de acuerdo con cada afirmación según su experiencia.`,
+    `La inteligencia artificial generativa produce texto, imágenes u otros contenidos a partir de lo que escribes (por ejemplo ChatGPT, Replika, DALL·E, DeepSeek). Piensa en el sistema o los sistemas de IA generativa que usas con más frecuencia e indica cuánto estás de acuerdo con cada afirmación según tu experiencia.`,
     `La inteligencia artificial generativa produce texto, imágenes u otros contenidos a partir de lo que escribes (por ejemplo ChatGPT, Replika, DALL·E, DeepSeek). Piensa en el sistema o los sistemas de IA generativa que usas con más frecuencia e indica cuánto estás de acuerdo con cada afirmación según tu experiencia.`,
   ),
   scaleNote: bi("Escala de 1 (totalmente en desacuerdo) a 5 (totalmente de acuerdo)."),
@@ -40,7 +40,7 @@ export const AIAS: ScaleDef = {
       "Hay una sensación de familiaridad en mi manera de interactuar con la IA.",
       "Hay una sensación de familiaridad en mi forma de interactuar con la IA.") },
     { code: "EC3", subscale: "EC", text: co_es(
-      "Espero con ganas interactuar con la IA.",
+      "Tengo ganas de interactuar con la IA.",
       "Me apetece interactuar con la IA.") },
     { code: "EC4", subscale: "EC", text: bi("Siento cercanía y comodidad en mis interacciones con la IA.") },
     { code: "EC5", subscale: "EC", text: co_es(

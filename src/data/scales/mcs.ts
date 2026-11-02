@@ -20,7 +20,7 @@ export const MCS: ScaleDef = {
   id: "MCS",
   title: bi("Tu relación con la inteligencia artificial"),
   instructions: co_es(
-    `Piense en su experiencia habitual con sistemas de inteligencia artificial conversacional (como ChatGPT, Gemini, Claude, etc.). Cada frase completa el enunciado «${STEM_CO}». Indique en qué medida está de acuerdo con cada una.`,
+    `Piensa en tu experiencia habitual con sistemas de inteligencia artificial conversacional (como ChatGPT, Gemini, Claude, etc.). Cada frase completa el enunciado «${STEM_CO}». Indica en qué medida estás de acuerdo con cada una.`,
     `Piensa en tu experiencia habitual con sistemas de inteligencia artificial conversacional (como ChatGPT, Gemini, Claude, etc.). Cada frase completa el enunciado «${STEM_ES}». Indica en qué medida estás de acuerdo con cada una.`,
   ),
   scaleNote: bi("Escala de 1 (totalmente en desacuerdo) a 7 (totalmente de acuerdo). Cada frase completa: «Mi relación con la inteligencia artificial…»."),

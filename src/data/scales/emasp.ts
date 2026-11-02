@@ -10,7 +10,7 @@ export const EMASP: ScaleDef = {
   id: "EMASP",
   title: bi("Tu apoyo social"),
   instructions: {
-    CO: "Las siguientes frases se refieren a las personas que le rodean. Indique en qué medida está de acuerdo con cada una.",
+    CO: "Las siguientes frases se refieren a las personas que te rodean. Indica en qué medida estás de acuerdo con cada una.",
     ES: "Las siguientes frases se refieren a las personas que te rodean. Indica en qué medida estás de acuerdo con cada una.",
   },
   scaleNote: bi("Escala de 1 (completamente en desacuerdo) a 6 (completamente de acuerdo)."),

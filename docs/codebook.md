@@ -8,7 +8,7 @@ Los ids están intercalados deliberadamente: el número no guarda relación con 
 
 | id | Nivel | Enunciado (CO) |
 |---|---|---|
-| S01 | mediacion | Discutí con alguien y no logro entender por qué reaccionó como reaccionó… |
+| S01 | mediacion | Discutí con alguien y no logro entender por qué reaccionó como reaccionó… *(adaptado ES)* |
 | S02 | epistemica | Mejor época del año para viajar a otro país |
 | S03 | autotelica | Jugar o inventar algo con alguien por el puro gusto |
 | S04 | epistemica | Año exacto en que se inventó el bombillo *(adaptado ES: bombilla)* |
@@ -24,17 +24,17 @@ Los ids están intercalados deliberadamente: el número no guarda relación con 
 | S14 | autotelica | Conversar largo sin más motivo que la conversación |
 | S15 | epistemica | Quién es el mejor jugador de fútbol del mundo |
 | S16 | autotelica | Alguien ahí mientras paso el rato, sin plan |
-| S17 | mediacion | Decir algo importante y no estar seguro de que lo entienda |
+| S17 | mediacion | Decir algo importante y no tener claro que lo entienda |
 | S18 | autotelica | Contar cómo estuvo mi día y que el otro cuente el suyo |
 | S19 | epistemica | Cláusula de contrato que pueda perjudicarme |
 | S20 | autotelica | Acompañarnos mutuamente en algo que cada uno disfruta |
 | S21 | mediacion | Prepararme para una conversación difícil pendiente |
 | S22 | autotelica | Conversaciones que se alargan solas |
-| S23 | epistemica | Sembrar un árbol de mango *(adaptado ES: árbol frutal)* |
+| S23 | epistemica | Sembrar un limonero: qué cuidados necesita *(ES: plantar)* |
 | S24 | autotelica | Imaginar historias o situaciones absurdas, mitad y mitad |
 | S25 | mediacion | A mitad de mensajes: no me queda claro qué me quiere decir |
 | S26 | epistemica | ¿Invertir tiempo en otro idioma o dedicarlo a otra cosa? |
-| S27 | mediacion | Terminé la conversación: ¿dejar el tema o volver a sacarlo? |
+| S27 | mediacion | Acabo de terminar la conversación: ¿dejar el tema o volver a sacarlo? |
 | P01 | — | Práctica (bloque `practice`, excluir del análisis) |
 
 **Recuento:** 9 epistémicas · 9 mediación · 9 autotélicas.
