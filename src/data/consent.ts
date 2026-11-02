@@ -95,11 +95,9 @@ function baseSections(country: Country): ConsentSection[] {
     sections.push({
       heading: "Protección de datos (Reglamento (UE) 2016/679)",
       body: [
-        "Responsable del tratamiento: [PENDIENTE — completar con el responsable designado por la Universitat de València].",
         "Finalidad: realización del estudio científico descrito en este documento. Base jurídica: el consentimiento del interesado (art. 6.1.a RGPD) y el tratamiento con fines de investigación científica (art. 9.2.j RGPD).",
         "Conservación: las respuestas se recogen de forma anónima y se conservan con fines de investigación. La lista de NPA se conserva solo hasta que se asignen los puntos de clase y después se suprime.",
         "Derechos: puede ejercer sus derechos de acceso, rectificación, supresión, limitación, portabilidad y oposición escribiendo al correo de contacto, así como presentar una reclamación ante la Agencia Española de Protección de Datos.",
-        "Delegado de Protección de Datos: [PENDIENTE — completar con los datos del DPD de la Universitat de València].",
       ],
     });
   }
@@ -110,9 +108,6 @@ function baseSections(country: Country): ConsentSection[] {
       `Investigador principal: ${RESEARCHER.name}`,
       `Celular: ${RESEARCHER.phone}`,
       `Correo: ${RESEARCHER.email}`,
-      country === "CO"
-        ? "Comité de Ética en Investigación, Universidad de La Sabana: [PENDIENTE — completar número de acta y fecha de aprobación]."
-        : "Comité de Ética en Investigación: [PENDIENTE — completar el comité que avala la recogida en España, número de acta y fecha].",
     ],
   });
 
